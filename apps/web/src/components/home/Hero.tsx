@@ -1,57 +1,58 @@
 'use client';
-import Link from 'next/link';
-import { Button } from '@/components/ui/Button';
+import { useLocale } from '@/components/LocaleProvider';
+import { ButtonLink } from '@/components/ui/Button';
+import { ArrowIcon, CalendarIcon, CheckCircleIcon } from '@/components/ui/Icons';
+import HomeImage from '@/components/home/HomeImage';
 
 export default function Hero() {
+  const { t } = useLocale();
+  const trust = [t('trustCatalog'), t('trustBooking'), t('trustListings')];
+
   return (
-    <section className="relative overflow-hidden bg-[#0B172B] min-h-[85vh]">
-      <div className="container-xl grid md:grid-cols-2 min-h-[85vh] items-center gap-8 py-12">
-        <div className="text-white">
-          <h1 className="text-4xl md:text-6xl font-black leading-tight">
-            كل ما تحتاجه سيارتك، <span className="text-brand-orange">في مكان واحد.</span>
-          </h1>
-          <p className="mt-4 text-lg md:text-xl text-slate-200 max-w-xl">
-            قطع غيار رينو، صيانة متخصصة، وخدمات متكاملة لسيارتك.
+    <section className="relative isolate overflow-hidden bg-brand-navy text-white">
+      {/* Photo sits on the end side on desktop (full-bleed behind the text on mobile) */}
+      <div className="absolute inset-0 -z-20 lg:inset-y-0 lg:start-auto lg:end-0 lg:w-[68%]">
+        <HomeImage slot="hero" className="h-full w-full" />
+        <div aria-hidden="true" className="absolute inset-0 bg-brand-navy/25" />
+      </div>
+      {/* Navy scrim: protects text contrast. Opaque on the text side, clear toward the car. */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-10 bg-linear-to-b from-brand-navy via-brand-navy/80 to-brand-navy/55 lg:bg-linear-to-r lg:from-brand-navy lg:from-[34%] lg:via-brand-navy/70 lg:via-[52%] lg:to-transparent rtl:lg:bg-linear-to-l"
+      />
+      <div aria-hidden="true" className="absolute inset-x-0 bottom-0 -z-10 h-24 bg-linear-to-t from-black/40 to-transparent" />
+
+      <div className="container-xl flex min-h-[34rem] items-center py-14 sm:min-h-[38rem] lg:min-h-[40rem] lg:py-20">
+        <div className="max-w-2xl lg:max-w-xl xl:max-w-2xl">
+          <p className="inline-flex items-center gap-2 rounded-full border border-brand-orange/50 bg-brand-orange/15 px-4 py-1.5 text-sm font-bold text-orange-300 sm:text-base">
+            <span className="h-2 w-2 rounded-full bg-brand-orange" aria-hidden="true" />
+            {t('heroEyebrow')}
           </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link href="/vehicles">
-              <Button size="lg" className="gap-2">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                اكتشف خدماتنا
-              </Button>
-            </Link>
-            <Link href="/booking">
-              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10 gap-2">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                احجز صيانة سيارتك
-              </Button>
-            </Link>
+          <h1 className="mt-5 text-4xl font-extrabold leading-[1.2] tracking-tight text-white sm:text-5xl xl:text-6xl">
+            {t('heroHeadline1')}
+            <span className="mt-1 block text-brand-orange">{t('heroHeadline2')}</span>
+          </h1>
+          <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate-200 sm:text-xl">{t('heroDesc')}</p>
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <ButtonLink href="#services" size="lg" className="px-8 shadow-lg shadow-brand-orange/30">
+              {t('heroCtaPrimary')}
+              <ArrowIcon width={18} height={18} />
+            </ButtonLink>
+            <ButtonLink href="/booking" variant="onDark" size="lg" className="bg-white/5 px-8 backdrop-blur-sm">
+              <CalendarIcon width={18} height={18} />
+              {t('heroCtaSecondary')}
+            </ButtonLink>
           </div>
-          <div className="mt-10 flex items-center gap-6 text-sm text-white/80 flex-wrap">
-            <div className="flex items-center gap-2">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              قطع غيار أصلية
-            </div>
-            <span className="opacity-40">|</span>
-            <div className="flex items-center gap-2">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-              صيانة احترافية
-            </div>
-            <span className="opacity-40">|</span>
-            <div className="flex items-center gap-2">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
-              دعم فني متكامل
-            </div>
-          </div>
-        </div>
-        <div className="relative">
-          <div className="absolute -left-10 top-10 w-72 h-72 bg-brand-orange/20 rotate-12 rounded-3xl blur-2xl" />
-          <div className="absolute -right-10 bottom-10 w-60 h-60 bg-brand-orange/10 -rotate-12 rounded-3xl blur-2xl" />
-          <img
-            src="https://commons.wikimedia.org/wiki/Special:FilePath/Renault_Duster_2020_(Russia).jpg"
-            alt="Renault Duster"
-            className="relative z-10 w-full h-auto object-contain drop-shadow-2xl"
-          />
+
+          <ul className="mt-10 flex flex-col gap-3 border-t border-white/15 pt-6 text-base text-slate-100 sm:flex-row sm:flex-wrap sm:gap-x-8">
+            {trust.map((label) => (
+              <li key={label} className="flex items-center gap-2">
+                <CheckCircleIcon className="shrink-0 text-brand-orange" width={20} height={20} />
+                {label}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

@@ -1,44 +1,69 @@
 'use client';
 import Link from 'next/link';
 import { useLocale } from '@/components/LocaleProvider';
+import { MailIcon, PhoneIcon, PinIcon } from '@/components/ui/Icons';
+import { siteConfig } from '@/lib/site-config';
+import type { TranslationKey } from '@/lib/i18n';
+
+const LINKS: { href: string; label: TranslationKey }[] = [
+  { href: '/', label: 'home' },
+  { href: '/vehicles', label: 'spareParts' },
+  { href: '/booking', label: 'bookService' },
+  { href: '/marketplace', label: 'navCarsForSale' },
+  { href: '/marketplace/new', label: 'sellCar' },
+  { href: '/wholesale', label: 'wholesale' },
+];
 
 export default function Footer() {
   const { t } = useLocale();
+  // Contact details are shown only when configured (see lib/site-config.ts); never placeholders.
+  const contacts = [
+    siteConfig.phone && { icon: PhoneIcon, label: t('footerPhone'), value: siteConfig.phone, href: `tel:${siteConfig.phone.replace(/\s/g, '')}`, ltr: true },
+    siteConfig.email && { icon: MailIcon, label: t('footerEmail'), value: siteConfig.email, href: `mailto:${siteConfig.email}`, ltr: true },
+    siteConfig.address && { icon: PinIcon, label: t('footerAddress'), value: siteConfig.address, href: undefined, ltr: false },
+  ].filter(Boolean) as { icon: typeof PhoneIcon; label: string; value: string; href?: string; ltr: boolean }[];
+
   return (
-    <footer className="bg-brand-navy text-slate-200 mt-16">
-      <div className="container-xl py-12 grid md:grid-cols-4 gap-8">
+    <footer className="bg-brand-navy text-slate-300">
+      <div className={`container-xl grid gap-10 py-14 ${contacts.length ? 'md:grid-cols-[1.4fr_1fr_1fr]' : 'md:grid-cols-[1.4fr_1fr]'}`}>
         <div>
-          <div className="text-2xl font-black">7 <span className="text-brand-orange">MOTORS</span></div>
-          <p className="mt-3 text-sm text-slate-300">Renault spare parts, maintenance, and car marketplace.</p>
+          <div dir="ltr" className="text-2xl font-extrabold text-white" style={{ textAlign: 'start' }}>
+            7 <span className="text-brand-orange">MOTORS</span>
+          </div>
+          <p className="mt-3 max-w-sm text-sm leading-relaxed">{t('footerAbout')}</p>
         </div>
-        <div>
-          <h4 className="font-semibold mb-3">Navigation</h4>
-          <ul className="space-y-2 text-sm">
-            <li><Link href="/vehicles" className="hover:text-brand-orange">Spare Parts</Link></li>
-            <li><Link href="/booking" className="hover:text-brand-orange">Book Maintenance</Link></li>
-            <li><Link href="/marketplace" className="hover:text-brand-orange">Sell Your Car</Link></li>
+
+        <nav aria-label={t('footerLinks')}>
+          <h2 className="mb-4 font-bold text-white">{t('footerLinks')}</h2>
+          <ul className="space-y-2.5 text-sm">
+            {LINKS.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="transition hover:text-brand-orange">{t(l.label)}</Link>
+              </li>
+            ))}
           </ul>
-        </div>
-        <div>
-          <h4 className="font-semibold mb-3">Services</h4>
-          <ul className="space-y-2 text-sm">
-            <li>Renault Spare Parts</li>
-            <li>Vehicle Maintenance</li>
-            <li>Car Listings</li>
-            <li>Wholesale</li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-semibold mb-3">Contact</h4>
-          <ul className="space-y-2 text-sm">
-            <li>Phone: +20 100 000 0000</li>
-            <li>Email: info@7motors.com</li>
-            <li>Cairo, Egypt</li>
-          </ul>
-        </div>
+        </nav>
+
+        {contacts.length ? (
+          <div>
+            <h2 className="mb-4 font-bold text-white">{t('footerContact')}</h2>
+            <ul className="space-y-3 text-sm">
+              {contacts.map((c) => (
+                <li key={c.label} className="flex items-start gap-3">
+                  <c.icon className="mt-0.5 shrink-0 text-brand-orange" width={18} height={18} />
+                  {c.href ? (
+                    <a href={c.href} dir={c.ltr ? 'ltr' : undefined} className="transition hover:text-brand-orange">{c.value}</a>
+                  ) : (
+                    <span>{c.value}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </div>
-      <div className="border-t border-white/10 py-4 text-center text-xs text-slate-400">
-        © 2026 7 MOTORS. All rights reserved.
+      <div className="border-t border-white/10 py-5 text-center text-xs text-slate-400">
+        © 7 MOTORS. {t('footerRights')}.
       </div>
     </footer>
   );

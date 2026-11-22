@@ -1,18 +1,19 @@
-'use client';
 import Hero from '@/components/home/Hero';
 import ServiceSelection from '@/components/home/ServiceSelection';
-import FeaturedProducts from '@/components/home/FeaturedProducts';
+import WholesaleBanner from '@/components/home/WholesaleBanner';
+import FeaturedCars from '@/components/home/FeaturedCars';
 import WhyMotors from '@/components/home/WhyMotors';
-import FinalCTA from '@/components/home/FinalCTA';
+import HowItWorks from '@/components/home/HowItWorks';
 
 export default function Home() {
   return (
-    <div>
+    <>
       <Hero />
       <ServiceSelection />
-      <FeaturedProducts />
+      <WholesaleBanner />
+      <FeaturedCars />
       <WhyMotors />
-      <FinalCTA />
-    </div>
+      <HowItWorks />
+    </>
   );
 }

@@ -1,0 +1,44 @@
+'use client';
+import Image from 'next/image';
+import { vehicleImage } from '@/lib/vehicle-images';
+import { CarIcon } from '@/components/ui/Icons';
+
+/**
+ * Renault model photo for a VehicleModel. Uses the local, optimized image mapped by slug
+ * (lib/vehicle-images.ts). Models without a licensed Renault photo get a neutral branded
+ * placeholder, never an unrelated image or a hotlinked URL.
+ */
+export default function VehicleImage({
+  slug,
+  name,
+  className = '',
+  sizes,
+  imgClassName = '',
+}: {
+  slug?: string | null;
+  name: string;
+  className?: string;
+  sizes: string;
+  imgClassName?: string;
+}) {
+  const img = vehicleImage(slug);
+  return (
+    <div className={`relative overflow-hidden bg-brand-navy ${className}`}>
+      {img ? (
+        <Image
+          src={img.src}
+          alt={name}
+          fill
+          sizes={sizes}
+          placeholder="blur"
+          blurDataURL={img.blur}
+          className={`object-cover ${imgClassName}`}
+        />
+      ) : (
+        <div className="grid h-full w-full place-items-center bg-linear-to-br from-brand-navy to-brand-charcoal text-white/40" role="img" aria-label={name}>
+          <CarIcon width={48} height={48} strokeWidth={1.2} />
+        </div>
+      )}
+    </div>
+  );
+}

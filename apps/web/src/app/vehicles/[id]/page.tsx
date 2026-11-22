@@ -8,6 +8,8 @@ import { useLocale } from '@/components/LocaleProvider';
 import { Card, CardBody } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Feedback';
 import { Button } from '@/components/ui/Button';
+import VehicleImage from '@/components/VehicleImage';
+import { PartsIcon } from '@/components/ui/Icons';
 
 function VehicleDetailPageContent() {
   const params = useParams();
@@ -34,7 +36,7 @@ function VehicleDetailPageContent() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="flex items-center gap-4 mb-6">
-        {model?.imageUrl ? <img src={model.imageUrl} className="w-24 h-16 object-cover rounded-lg" /> : null}
+        {model ? <VehicleImage slug={model.slug} name={model.name} sizes="96px" className="h-16 w-24 shrink-0 rounded-lg" /> : null}
         <div>
           <h1 className="text-2xl font-bold">{model?.name || 'Vehicle'}</h1>
           <Link href="/vehicles" className="text-sm text-brand-blue hover:underline">Change vehicle</Link>
@@ -54,7 +56,7 @@ function VehicleDetailPageContent() {
           <div key={p.id}>
             <Card className="overflow-hidden hover:shadow-md transition">
               <div className="aspect-square bg-slate-100 flex items-center justify-center">
-                {p.images?.[0]?.url ? <img src={p.images[0].url} className="w-full h-full object-cover" /> : <span className="text-4xl">🔧</span>}
+                {p.images?.[0]?.url ? <img src={p.images[0].url} alt={name(p)} className="w-full h-full object-cover" /> : <PartsIcon width={40} height={40} className="text-slate-400" />}
               </div>
               <CardBody>
                 <div className="font-semibold">{name(p)}</div>

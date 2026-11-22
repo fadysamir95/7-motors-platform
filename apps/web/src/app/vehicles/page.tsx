@@ -5,6 +5,7 @@ import { apiGet } from '@/lib/api';
 import { useLocale } from '@/components/LocaleProvider';
 import { Card, CardBody } from '@/components/ui/Card';
 import { Skeleton } from '@/components/ui/Feedback';
+import VehicleImage from '@/components/VehicleImage';
 
 export default function VehiclesPage() {
   const { t } = useLocale();
@@ -47,13 +48,7 @@ export default function VehiclesPage() {
           {filtered.map((m) => (
             <Link key={m.id} href={`/vehicles/${m.id}`} onClick={() => setSelected(m.id)}>
               <Card className={`overflow-hidden hover:shadow-lg transition group ${selected === m.id ? 'ring-2 ring-brand-orange' : ''}`}>
-                <div className="aspect-[4/3] bg-slate-100 overflow-hidden">
-                  {m.imageUrl ? (
-                    <img src={m.imageUrl} alt={m.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-5xl">🚗</div>
-                  )}
-                </div>
+                <VehicleImage slug={m.slug} name={m.name} sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw" className="aspect-[4/3]" imgClassName="group-hover:scale-105 transition duration-300" />
                 <CardBody className="p-4">
                   <div className="font-bold text-brand-navy">{m.name}</div>
                   <div className="text-sm text-muted mt-1">2010 - Present</div>

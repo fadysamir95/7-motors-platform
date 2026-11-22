@@ -22,7 +22,7 @@ function MarketplaceDetailPageContent() {
       <h1 className="text-2xl font-bold mb-2">{listing.model?.name} {listing.year}</h1>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
         {listing.images?.map((img: any) => (
-          <img key={img.id} src={img.url} className="w-full h-40 object-cover rounded" />
+          <img key={img.id} src={img.url} alt={`${listing.model?.name || 'Renault'} ${listing.year}`} className="w-full h-40 object-cover rounded" />
         ))}
       </div>
       <div className="space-y-1">
