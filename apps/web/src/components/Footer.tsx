@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useLocale } from '@/components/LocaleProvider';
 import { MailIcon, PhoneIcon, PinIcon } from '@/components/ui/Icons';
@@ -26,9 +27,7 @@ export default function Footer() {
     <footer className="bg-brand-navy text-slate-300">
       <div className={`container-xl grid gap-10 py-14 ${contacts.length ? 'md:grid-cols-[1.4fr_1fr_1fr]' : 'md:grid-cols-[1.4fr_1fr]'}`}>
         <div>
-          <div dir="ltr" className="text-2xl font-extrabold text-white" style={{ textAlign: 'start' }}>
-            7 <span className="text-brand-orange">MOTORS</span>
-          </div>
+          <Image src="/brand/logo.webp" alt="7 MOTORS" width={640} height={229} sizes="168px" className="h-14 w-auto" />
           <p className="mt-3 max-w-sm text-sm leading-relaxed">{t('footerAbout')}</p>
         </div>
 

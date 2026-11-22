@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -58,9 +59,7 @@ export default function Header() {
       </a>
       <div className="container-xl flex h-16 items-center justify-between gap-4">
         <Link href="/" className="shrink-0 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-orange" aria-label="7 MOTORS">
-          <span dir="ltr" className="text-2xl font-extrabold tracking-tight">
-            7 <span className="text-brand-orange">MOTORS</span>
-          </span>
+          <Image src="/brand/logo.webp" alt="" width={640} height={229} priority sizes="124px" className="h-11 w-auto" />
         </Link>
 
         <nav aria-label={t('navMain')} className="hidden items-center gap-6 lg:flex xl:gap-8">
