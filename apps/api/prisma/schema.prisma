@@ -1,0 +1,701 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RoleName {
+  SUPER_ADMIN
+  ADMIN
+  SERVICE_MANAGER
+  INVENTORY_MANAGER
+  ORDER_MANAGER
+  MARKETPLACE_MODERATOR
+  WHOLESALE_MANAGER
+}
+
+enum Locale {
+  ar
+  en
+}
+
+enum StockMovementType {
+  IN
+  OUT
+  ADJUSTMENT
+  RESERVATION
+  RELEASE
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID
+  PROCESSING
+  READY_FOR_PICKUP
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+}
+
+enum FulfillmentMethod {
+  DELIVERY
+  PICKUP
+}
+
+enum BookingStatus {
+  PENDING_CONFIRMATION
+  CONFIRMED
+  RESCHEDULED
+  COMPLETED
+  CANCELLED
+  REJECTED
+}
+
+enum CarListingStatus {
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  PUBLISHED
+  SOLD
+  EXPIRED
+}
+
+enum WholesaleStatus {
+  NEW
+  CONTACTED
+  QUOTATION_SENT
+  NEGOTIATION
+  APPROVED
+  REJECTED
+  CLOSED
+}
+
+enum NotificationType {
+  BOOKING_CREATED
+  ORDER_CREATED
+  WHOLESALE_REQUEST
+  CAR_LISTING_SUBMITTED
+  LOW_STOCK
+  SYSTEM
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  firstName    String?
+  lastName     String?
+  phone        String?
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  roles            UserRole[]
+  customerProfile  CustomerProfile?
+  auditLogs        AuditLog[]
+  notifications    Notification[]
+  carListings      CarListing[]
+  serviceBookings  ServiceBooking[] @relation("BookingCreatedBy")
+}
+
+model Role {
+  id          String           @id @default(uuid())
+  name        RoleName         @unique
+  description String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  permissions RolePermission[]
+  users       UserRole[]
+}
+
+model Permission {
+  id          String           @id @default(uuid())
+  key         String           @unique
+  description String?
+  createdAt   DateTime         @default(now())
+
+  roles RolePermission[]
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+}
+
+model UserRole {
+  userId String
+  roleId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+}
+
+model CustomerProfile {
+  id        String   @id @default(uuid())
+  userId    String?  @unique
+  user      User?    @relation(fields: [userId], references: [id])
+  fullName  String
+  phone     String
+  address   String?
+  city      String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders           Order[]
+  serviceBookings  ServiceBooking[]
+  carListings      CarListing[]
+  wholesaleRequests WholesaleRequest[]
+}
+
+model VehicleModel {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  name        String
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  generations VehicleGeneration[]
+  variants    VehicleVariant[]
+  products    ProductVehicleCompatibility[]
+  carListings CarListing[]
+  serviceBookings ServiceBooking[]
+}
+
+model VehicleGeneration {
+  id        String   @id @default(uuid())
+  modelId   String
+  model     VehicleModel @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  name      String
+  startYear Int
+  endYear   Int?
+  createdAt DateTime @default(now())
+
+  variants VehicleVariant[]
+}
+
+model VehicleVariant {
+  id           String   @id @default(uuid())
+  modelId      String
+  model        VehicleModel @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  generationId String?
+  generation   VehicleGeneration? @relation(fields: [generationId], references: [id])
+  engineTypeId String?
+  engineType   EngineType? @relation(fields: [engineTypeId], references: [id])
+  trim         String?
+  createdAt    DateTime @default(now())
+
+  years ProductCompatibilityYear[]
+  serviceBookings ServiceBooking[]
+}
+
+model EngineType {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  capacity  String?
+  createdAt DateTime @default(now())
+
+  variants VehicleVariant[]
+}
+
+model ProductCategory {
+  id        String   @id @default(uuid())
+  slug      String   @unique
+  parentId  String?
+  parent    ProductCategory? @relation("CategoryTree", fields: [parentId], references: [id])
+  children  ProductCategory[] @relation("CategoryTree")
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Product[]
+  translations ProductCategoryTranslation[]
+}
+
+model ProductCategoryTranslation {
+  id          String   @id @default(uuid())
+  categoryId  String
+  category    ProductCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  locale      Locale
+  name        String
+  description String?
+
+  @@unique([categoryId, locale])
+}
+
+model Product {
+  id            String   @id @default(uuid())
+  sku           String   @unique
+  partCode      String?
+  oemReference  String?
+  categoryId    String?
+  category      ProductCategory? @relation(fields: [categoryId], references: [id])
+  countryOfOrigin String?
+  brand         String?
+  price         Decimal  @db.Decimal(12, 2)
+  salePrice     Decimal? @db.Decimal(12, 2)
+  isActive      Boolean  @default(true)
+  isPublished   Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  translations ProductTranslation[]
+  images       ProductImage[]
+  compatibility ProductVehicleCompatibility[]
+  inventory    Inventory?
+  cartItems    CartItem[]
+  orderItems   OrderItem[]
+}
+
+model ProductTranslation {
+  id          String   @id @default(uuid())
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  locale      Locale
+  name        String
+  description String?
+
+  @@unique([productId, locale])
+}
+
+model ProductImage {
+  id        String   @id @default(uuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model ProductVehicleCompatibility {
+  id        String   @id @default(uuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  modelId   String
+  model     VehicleModel @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  years     ProductCompatibilityYear[]
+
+  @@unique([productId, modelId])
+}
+
+model ProductCompatibilityYear {
+  id             String   @id @default(uuid())
+  compatibilityId String
+  compatibility  ProductVehicleCompatibility @relation(fields: [compatibilityId], references: [id], onDelete: Cascade)
+  year           Int
+  variantId      String?
+  variant        VehicleVariant? @relation(fields: [variantId], references: [id])
+
+  @@unique([compatibilityId, year, variantId])
+}
+
+model Inventory {
+  id            String   @id @default(uuid())
+  productId     String   @unique
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  stock         Int      @default(0)
+  reserved      Int      @default(0)
+  lowStockThreshold Int  @default(5)
+  updatedAt     DateTime @updatedAt
+
+  movements InventoryMovement[]
+}
+
+model InventoryMovement {
+  id          String            @id @default(uuid())
+  inventoryId String
+  inventory   Inventory         @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
+  type        StockMovementType
+  quantity    Int
+  reference   String?
+  note        String?
+  createdAt   DateTime          @default(now())
+  createdBy   String?
+}
+
+model Cart {
+  id        String   @id @default(uuid())
+  userId    String?  @unique
+  sessionId String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items CartItem[]
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([cartId, productId])
+}
+
+model Order {
+  id                String            @id @default(uuid())
+  orderNumber       String            @unique
+  customerId        String?
+  customer          CustomerProfile?  @relation(fields: [customerId], references: [id])
+  guestName         String?
+  guestPhone        String?
+  status            OrderStatus       @default(PENDING_PAYMENT)
+  paymentStatus     PaymentStatus     @default(PENDING)
+  paymentMethod     PaymentMethod
+  fulfillmentMethod FulfillmentMethod
+  deliveryAddress   String?
+  notes             String?
+  subtotal          Decimal           @db.Decimal(12, 2)
+  tax               Decimal           @db.Decimal(12, 2) @default(0)
+  shippingFee       Decimal           @db.Decimal(12, 2) @default(0)
+  total             Decimal           @db.Decimal(12, 2)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  items         OrderItem[]
+  payments      Payment[]
+  statusHistory OrderStatusHistory[]
+  shipment      Shipment?
+  serviceBookings ServiceBooking[]
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  unitPrice Decimal  @db.Decimal(12, 2)
+  subtotal  Decimal  @db.Decimal(12, 2)
+}
+
+model Payment {
+  id              String        @id @default(uuid())
+  orderId         String
+  order           Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  method          PaymentMethod
+  status          PaymentStatus @default(PENDING)
+  amount          Decimal       @db.Decimal(12, 2)
+  providerRef     String?
+  idempotencyKey  String?       @unique
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  transactions PaymentTransaction[]
+}
+
+model PaymentTransaction {
+  id         String   @id @default(uuid())
+  paymentId  String
+  payment    Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  status     PaymentStatus
+  providerRef String?
+  payload    Json?
+  createdAt  DateTime @default(now())
+}
+
+model Shipment {
+  id        String   @id @default(uuid())
+  orderId   String   @unique
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  carrier   String?
+  trackingNumber String?
+  status    String   @default("pending")
+  shippedAt DateTime?
+  deliveredAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderStatusHistory {
+  id        String      @id @default(uuid())
+  orderId   String
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    OrderStatus
+  note      String?
+  changedBy String?
+  createdAt DateTime    @default(now())
+}
+
+model ServiceType {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  translations ServiceTypeTranslation[]
+  bookings     BookingService[]
+}
+
+model ServiceTypeTranslation {
+  id          String   @id @default(uuid())
+  serviceTypeId String
+  serviceType ServiceType @relation(fields: [serviceTypeId], references: [id], onDelete: Cascade)
+  locale      Locale
+  name        String
+  description String?
+
+  @@unique([serviceTypeId, locale])
+}
+
+model BusinessHour {
+  id        String   @id @default(uuid())
+  dayOfWeek Int      // 0-6
+  openTime  String   // "08:00"
+  closeTime String   // "18:00"
+  isClosed  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([dayOfWeek])
+}
+
+model BookingSlot {
+  id        String   @id @default(uuid())
+  date      DateTime @db.Date
+  startTime String
+  endTime   String
+  isBlocked Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  bookings ServiceBooking[]
+
+  @@unique([date, startTime])
+}
+
+model BlockedSlot {
+  id        String   @id @default(uuid())
+  date      DateTime @db.Date
+  startTime String
+  reason    String?
+  createdAt DateTime @default(now())
+  createdBy String?
+}
+
+model ServiceBooking {
+  id            String        @id @default(uuid())
+  bookingRef    String        @unique
+  customerId    String?
+  customer      CustomerProfile? @relation(fields: [customerId], references: [id])
+  createdBy     String?
+  creator       User?         @relation("BookingCreatedBy", fields: [createdBy], references: [id])
+  orderId       String?
+  order         Order?        @relation(fields: [orderId], references: [id])
+  fullName      String
+  phone         String
+  licenseNumber String
+  modelId       String?
+  model         VehicleModel? @relation(fields: [modelId], references: [id])
+  variantId     String?
+  variant       VehicleVariant? @relation(fields: [variantId], references: [id])
+  vin           String?
+  vehicleYear   Int?
+  slotId        String?       @unique
+  slot          BookingSlot?  @relation(fields: [slotId], references: [id])
+  date          DateTime      @db.Date
+  startTime     String
+  endTime       String
+  status        BookingStatus @default(PENDING_CONFIRMATION)
+  notes         String?
+  internalNotes String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  services BookingService[]
+  statusHistory BookingStatusHistory[]
+}
+
+model BookingService {
+  id            String   @id @default(uuid())
+  bookingId     String
+  booking       ServiceBooking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  serviceTypeId String
+  serviceType   ServiceType @relation(fields: [serviceTypeId], references: [id])
+
+  @@unique([bookingId, serviceTypeId])
+}
+
+model BookingStatusHistory {
+  id        String        @id @default(uuid())
+  bookingId String
+  booking   ServiceBooking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  status    BookingStatus
+  note      String?
+  changedBy String?
+  createdAt DateTime      @default(now())
+}
+
+model CarListing {
+  id            String           @id @default(uuid())
+  sellerId      String?
+  seller        CustomerProfile? @relation(fields: [sellerId], references: [id])
+  createdBy     String?
+  creator       User?            @relation(fields: [createdBy], references: [id])
+  modelId       String?
+  model         VehicleModel?    @relation(fields: [modelId], references: [id])
+  year          Int
+  price         Decimal          @db.Decimal(12, 2)
+  mileage       Int
+  transmission  String
+  fuelType      String
+  condition     String
+  description   String?
+  status        CarListingStatus @default(PENDING_REVIEW)
+  rejectionReason String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  publishedAt   DateTime?
+  soldAt        DateTime?
+
+  images        CarListingImage[]
+  statusHistory CarListingStatusHistory[]
+}
+
+model CarListingImage {
+  id        String   @id @default(uuid())
+  listingId String
+  listing   CarListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  url       String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model CarListingStatusHistory {
+  id        String           @id @default(uuid())
+  listingId String
+  listing   CarListing       @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  status    CarListingStatus
+  note      String?
+  changedBy String?
+  createdAt DateTime         @default(now())
+}
+
+model WholesaleRequest {
+  id            String          @id @default(uuid())
+  businessName  String
+  contactPerson String
+  phone         String
+  whatsapp      String?
+  email         String?
+  city          String?
+  businessType  String?
+  status        WholesaleStatus @default(NEW)
+  notes         String?
+  assignedTo    String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  customer      CustomerProfile? @relation(fields: [customerId], references: [id])
+  customerId    String?
+  items         WholesaleRequestItem[]
+  quotations    WholesaleQuotation[]
+  notesHistory  WholesaleNote[]
+}
+
+model WholesaleRequestItem {
+  id          String   @id @default(uuid())
+  requestId   String
+  request     WholesaleRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  productName String?
+  partCode    String?
+  modelId     String?
+  quantity    Int
+  notes       String?
+  createdAt   DateTime @default(now())
+}
+
+model WholesaleQuotation {
+  id        String   @id @default(uuid())
+  requestId String
+  request   WholesaleRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  amount    Decimal? @db.Decimal(12, 2)
+  details   String?
+  createdBy String?
+  createdAt DateTime @default(now())
+}
+
+model WholesaleNote {
+  id        String   @id @default(uuid())
+  requestId String
+  request   WholesaleRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  note      String
+  createdBy String?
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String?
+  user      User?            @relation(fields: [userId], references: [id])
+  type      NotificationType
+  title     String
+  body      String
+  data      Json?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+}
+
+model NotificationPreference {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  email     Boolean  @default(true)
+  sms       Boolean  @default(false)
+  whatsapp  Boolean  @default(false)
+  push      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+  action     String
+  entityType String
+  entityId   String?
+  metadata   Json?
+  createdAt  DateTime @default(now())
+}
+
+model SystemSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     Json
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+}
