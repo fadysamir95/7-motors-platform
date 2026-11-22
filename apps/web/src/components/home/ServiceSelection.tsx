@@ -16,7 +16,7 @@ const SERVICES: {
 }[] = [
   { slot: 'parts', href: '/vehicles', icon: PartsIcon, title: 'svcPartsTitle', desc: 'svcPartsDesc', cta: 'svcPartsCta' },
   { slot: 'booking', href: '/booking', icon: WrenchIcon, title: 'svcBookTitle', desc: 'svcBookDesc', cta: 'svcBookCta' },
-  { slot: 'sell', href: '/marketplace/new', icon: CarIcon, title: 'svcSellTitle', desc: 'svcSellDesc', cta: 'svcSellCta' },
+  { slot: 'sell', href: '/marketplace', icon: CarIcon, title: 'svcSellTitle', desc: 'svcSellDesc', cta: 'svcSellCta' },
 ];
 
 export default function ServiceSelection() {

@@ -9,8 +9,7 @@ const LINKS: { href: string; label: TranslationKey }[] = [
   { href: '/', label: 'home' },
   { href: '/vehicles', label: 'spareParts' },
   { href: '/booking', label: 'bookService' },
-  { href: '/marketplace', label: 'navCarsForSale' },
-  { href: '/marketplace/new', label: 'sellCar' },
+  { href: '/marketplace', label: 'navMarketplace' },
   { href: '/wholesale', label: 'wholesale' },
 ];
 

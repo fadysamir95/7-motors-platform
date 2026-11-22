@@ -10,15 +10,12 @@ const NAV: { href: string; label: TranslationKey }[] = [
   { href: '/', label: 'home' },
   { href: '/vehicles', label: 'spareParts' },
   { href: '/booking', label: 'bookService' },
-  { href: '/marketplace', label: 'navCarsForSale' },
-  { href: '/marketplace/new', label: 'sellCar' },
+  { href: '/marketplace', label: 'navMarketplace' },
   { href: '/wholesale', label: 'wholesale' },
 ];
 
 function isActive(pathname: string, href: string) {
   if (href === '/') return pathname === '/';
-  // "Cars for Sale" (/marketplace, /marketplace/:id) and "Sell Your Car" (/marketplace/new) are separate journeys.
-  if (href === '/marketplace') return pathname === '/marketplace' || /^\/marketplace\/(?!new(\/|$))/.test(pathname);
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
