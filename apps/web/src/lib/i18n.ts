@@ -7,7 +7,7 @@ export const translations = {
     spareParts: 'قطع الغيار',
     bookService: 'حجز خدمة',
     sellCar: 'بيع سيارتك',
-    wholesale: 'جملة',
+    wholesale: 'طلب الجملة',
     contact: 'اتصل بنا',
     cart: 'السلة',
     login: 'تسجيل الدخول',
