@@ -21,7 +21,7 @@ export class OrdersController {
   @Get('me/list')
   @UseGuards(JwtAuthGuard)
   myOrders(@CurrentUser() user: any) {
-    return this.service.listOrders({ customerId: user.id });
+    return this.service.listMine(user.id);
   }
 
   @Get()

@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Patch, Body, Param, Query, UseGuards, Req } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
+import { SlotsQueryDto } from './dto/slots-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { OptionalJwtAuthGuard } from '../auth/guards/optional-jwt-auth.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -15,8 +16,10 @@ export class BookingsController {
   serviceTypes() {
     return this.service.listServiceTypes();
   }
-  slots(@Query('date') date: string) {
-    return this.service.availableSlots(date);
+
+  @Get('slots')
+  slots(@Query() query: SlotsQueryDto) {
+    return this.service.availableSlots(query.date);
   }
 
   @Post()

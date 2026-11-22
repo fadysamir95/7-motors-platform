@@ -17,6 +17,7 @@ export class AuthService {
     const existing = await this.prisma.user.findUnique({ where: { email: dto.email } });
     if (existing) throw new ConflictException('Email already in use');
     const passwordHash = await bcrypt.hash(dto.password, 10);
+    // User and CustomerProfile are created atomically.
     const user = await this.prisma.user.create({
       data: {
         email: dto.email,
@@ -24,6 +25,12 @@ export class AuthService {
         firstName: dto.firstName,
         lastName: dto.lastName,
         phone: dto.phone,
+        customerProfile: {
+          create: {
+            fullName: [dto.firstName, dto.lastName].filter(Boolean).join(' ') || dto.email.split('@')[0],
+            phone: dto.phone ?? '',
+          },
+        },
       },
     });
     return this.issueToken(user.id, user.email, []);

@@ -7,8 +7,8 @@ import { useLocale } from '@/components/LocaleProvider';
 export default function LoginPage() {
   const { t } = useLocale();
   const router = useRouter();
-  const [email, setEmail] = useState('admin@7motors.com');
-  const [password, setPassword] = useState('Admin@12345');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [err, setErr] = useState('');
 
   const submit = async () => {

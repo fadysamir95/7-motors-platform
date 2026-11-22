@@ -1,10 +1,14 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CheckoutDto } from './dto/checkout.dto';
+import { CustomersService } from '../customers/customers.service';
 
 @Injectable()
 export class OrdersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private customers: CustomersService,
+  ) {}
 
   async checkout(userId: string | undefined, dto: CheckoutDto) {
     // idempotency
@@ -101,19 +105,26 @@ export class OrdersService {
   }
 
   private async getCustomerId(userId: string): Promise<string | undefined> {
-    const profile = await this.prisma.customerProfile.findUnique({ where: { userId } });
-    return profile?.id;
+    return (await this.customers.ensureProfile(userId)).id;
+  }
+
+  /** Orders belonging to the authenticated user only. Never reads filters from the client. */
+  async listMine(userId: string) {
+    const profile = await this.customers.ensureProfile(userId);
+    return this.listOrders({ profileId: profile.id });
   }
 
   async listOrders(query: any) {
-    const { status, paymentStatus, customerId, page = 1, limit = 20 } = query;
+    const { status, paymentStatus, customerId, profileId, page = 1, limit = 20 } = query;
     const where: any = {};
     if (status) where.status = status;
     if (paymentStatus) where.paymentStatus = paymentStatus;
+    if (profileId) where.customerId = profileId;
     if (customerId) {
-      // find customer profile id? customerId passed might be user id; resolve
+      // Admin filter: customerId is a user id. An unresolvable id must match nothing,
+      // never fall through to an unfiltered query.
       const profile = await this.prisma.customerProfile.findUnique({ where: { userId: customerId } });
-      if (profile) where.customerId = profile.id;
+      where.customerId = profile?.id ?? '__no_match__';
     }
     const skip = (Number(page) - 1) * Number(limit);
     const [items, total] = await Promise.all([

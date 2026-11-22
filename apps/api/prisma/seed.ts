@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { randomBytes } from 'crypto';
 
 const prisma = new PrismaClient();
 
@@ -11,12 +12,27 @@ async function main() {
   }
 
   // Super admin user
-  const passwordHash = await bcrypt.hash('Admin@12345', 10);
-  const admin = await prisma.user.upsert({
-    where: { email: 'admin@7motors.com' },
-    update: {},
-    create: { email: 'admin@7motors.com', passwordHash, firstName: 'Super', lastName: 'Admin' },
-  });
+  const adminEmail = process.env.SEED_ADMIN_EMAIL || 'admin@7motors.com';
+  let adminPassword = process.env.SEED_ADMIN_PASSWORD;
+  let generated = false;
+  if (!adminPassword) {
+    adminPassword = randomBytes(18).toString('base64url');
+    generated = true;
+  } else if (adminPassword.length < 12) {
+    throw new Error('SEED_ADMIN_PASSWORD must be at least 12 characters.');
+  }
+  const passwordHash = await bcrypt.hash(adminPassword, 10);
+  const existingAdmin = await prisma.user.findUnique({ where: { email: adminEmail } });
+  const admin =
+    existingAdmin ??
+    (await prisma.user.create({
+      data: { email: adminEmail, passwordHash, firstName: 'Super', lastName: 'Admin' },
+    }));
+  if (!existingAdmin && generated) {
+    console.log(`Seeded admin ${adminEmail} with generated password (shown once): ${adminPassword}`);
+  } else if (existingAdmin) {
+    console.log(`Admin ${adminEmail} already exists; password left unchanged.`);
+  }
   const superRole = await prisma.role.findUnique({ where: { name: 'SUPER_ADMIN' } });
   if (superRole) {
     await prisma.userRole.upsert({ where: { userId_roleId: { userId: admin.id, roleId: superRole.id } }, update: {}, create: { userId: admin.id, roleId: superRole.id } });

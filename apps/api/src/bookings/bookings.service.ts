@@ -16,9 +16,12 @@ export class BookingsService {
   }
 
   async availableSlots(dateStr: string) {
+    // Date-only ISO strings parse as UTC midnight; use UTC getters so the
+    // weekday does not depend on the server timezone.
     const date = new Date(dateStr);
+    if (Number.isNaN(date.getTime())) throw new BadRequestException('Invalid date');
     // business hours: check BusinessHour for dayOfWeek
-    const dayOfWeek = date.getDay();
+    const dayOfWeek = date.getUTCDay();
     const bh = await this.prisma.businessHour.findUnique({ where: { dayOfWeek } });
     if (bh?.isClosed) return [];
 
