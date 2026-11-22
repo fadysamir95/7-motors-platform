@@ -27,12 +27,12 @@ export type HomeImageSlot = {
 export const homeImages: Record<HomeImageSlotKey, HomeImageSlot> = {
   hero: {
     src: '/images/home/hero.webp',
-    width: 1920,
-    height: 1280,
-    blur: 'data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAAAQAgCdASoQAAsAA4BaJZQCdADLyM0lg4AAAP7zz8HPeMu16byGTm/ck88l/7FicJo8ovqWJeqSbCoBLlQHD3EpCuoIarJFkcAAAA==',
-    alt: { ar: 'سيارة رينو كوليوس بيضاء على جسر في المدينة', en: 'A white Renault Koleos SUV on an urban bridge' },
-    position: '50% 60%',
-    sizes: '100vw',
+    width: 1672,
+    height: 941,
+    blur: 'data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAQAgCdASoQAAkAA4BaJQBOgCBYQebpge6gAP7tDsgqNv3Y0Hs2PrpYpP7/LWwq8nrGjwGZnjYuO38DsJQeD0JCsEt5TCaExRil8tkxvdN5egGIODm/o4T2bQAAAA==',
+    alt: { ar: 'سيارة رينو كوليوس بيضاء أمام معرض رينو وقت الغروب', en: 'A white Renault Koleos in front of a Renault showroom at sunset' },
+    position: '50% 55%',
+    sizes: '(min-width: 1024px) 72vw, 100vw',
     priority: true,
   },
   parts: {
