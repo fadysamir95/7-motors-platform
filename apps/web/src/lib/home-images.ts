@@ -55,11 +55,11 @@ export const homeImages: Record<HomeImageSlotKey, HomeImageSlot> = {
   },
   sell: {
     src: '/images/home/sell.webp',
-    width: 1200,
-    height: 825,
-    blur: 'data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAAAQAgCdASoQAAsAA4BaJQBOgBxIW7kEppGgAP5FNI9dMvVFvCiJc2/ekQZ3obHKcrjFP6krbj5L9IraXldTxcAZZ0vmwIkcY2iiLB4B12QAAA==',
-    alt: { ar: 'رينو جراند سينيك زرقاء أمام مبنى حديث', en: 'A blue Renault Grand Scénic parked in front of a modern building' },
-    position: '50% 55%',
+    width: 1672,
+    height: 941,
+    blur: 'data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAQAgCdASoQAAkAA4BaJYwCdEf/gd+m/WiAAP7xgk1z5kuGFACEmyZAeWWUglebiqJZaiQNU8YeoV88oOM51RzoLUy9WMCLfA7F4gVr57ETKemdOAA=',
+    alt: { ar: 'رينو جراند سينيك زرقاء أمام مبنى زجاجي وقت الغروب', en: 'A blue Renault Grand Scénic in front of a glass building at dusk' },
+    position: '40% 60%',
     sizes: '(min-width: 768px) 33vw, 100vw',
   },
   wholesale: {

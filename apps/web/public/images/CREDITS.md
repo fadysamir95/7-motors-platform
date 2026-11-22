@@ -9,7 +9,7 @@ All automotive photography on the website is **Renault**-related, except the two
 |---|---|---|---|
 | `hero.webp` | Renault Koleos in front of a Renault showroom at sunset (hero) | Supplied by the project owner as the hero image. Origin and usage rights are not documented here: confirm before launch (it shows Renault trademarks) | To be confirmed by the owner |
 | `booking.webp` | Renault Mégane on a workshop lift | Unsplash, photo rU_bvNfr8pQ (https://unsplash.com/photos/a-car-being-worked-on-in-a-car-repair-shop-rU_bvNfr8pQ), photographer Mehmet Talha Onuk | Unsplash License |
-| `sell.webp` | Renault Grand Scénic IV | Pexels, photo 12152963 (https://www.pexels.com/photo/blue-car-parked-near-a-building-with-glass-windows-12152963/) | Pexels License |
+| `sell.webp` | Blue Renault Grand Scénic in front of a glass building at dusk (Car Marketplace card) | Supplied by the project owner. Origin and usage rights are not documented here: confirm before launch (it shows Renault trademarks) | To be confirmed by the owner |
 | `parts.webp` | Renault 16V engine (Renault Logan, Curitiba 2007) | Morio, Wikimedia Commons (https://commons.wikimedia.org/wiki/File:Renault_Logan_engine_2007_Curitiba.jpg) | CC BY-SA 3.0 (attribution + share-alike required) |
 | `cars/car-2.webp` (dev sample only) | Renault Clio RS | Pexels, photo 16634600 (https://www.pexels.com/photo/a-black-modern-renault-clio-sport-16634600/) | Pexels License |
 
