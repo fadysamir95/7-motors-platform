@@ -1,4 +1,5 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CheckoutDto } from './dto/checkout.dto';
 import { CustomersService } from '../customers/customers.service';
@@ -43,14 +44,11 @@ export class OrdersService {
     const orderNumber = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
     const order = await this.prisma.$transaction(async (tx) => {
-      // reserve/consume stock
-      for (const item of cart.items) {
-        const inv = await tx.inventory.findUnique({ where: { productId: item.productId } });
-        if (!inv || inv.stock - inv.reserved < item.quantity) throw new BadRequestException('Insufficient stock');
-        await tx.inventory.update({
-          where: { productId: item.productId },
-          data: { reserved: inv.reserved + item.quantity },
-        });
+      // Reserve stock atomically. Items are processed in a stable order so that two checkouts touching the
+      // same products always take row locks in the same sequence (no deadlocks).
+      const items = [...cart.items].sort((a, b) => (a.productId < b.productId ? -1 : a.productId > b.productId ? 1 : 0));
+      for (const item of items) {
+        await this.reserveStock(tx, item.productId, item.quantity, item.product.sku);
       }
 
       const createdOrder = await tx.order.create({
@@ -102,6 +100,20 @@ export class OrdersService {
     });
 
     return order;
+  }
+
+  /**
+   * Reserves `quantity` units with ONE conditional UPDATE: the availability check and the increment happen in
+   * the same statement, so concurrent checkouts can never reserve more than `stock - reserved`
+   * (a read-then-write here loses updates and oversells). Throws inside a transaction to roll everything back.
+   */
+  private async reserveStock(tx: Prisma.TransactionClient, productId: string, quantity: number, sku: string) {
+    if (!Number.isInteger(quantity) || quantity <= 0) throw new BadRequestException(`Invalid quantity for ${sku}`);
+    const updated = await tx.$executeRaw`
+      UPDATE "Inventory"
+      SET "reserved" = "reserved" + ${quantity}, "updatedAt" = NOW() AT TIME ZONE 'UTC'
+      WHERE "productId" = ${productId} AND "stock" - "reserved" >= ${quantity}`;
+    if (updated !== 1) throw new BadRequestException(`Insufficient stock for ${sku}`);
   }
 
   private async getCustomerId(userId: string): Promise<string | undefined> {
