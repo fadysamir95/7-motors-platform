@@ -73,7 +73,7 @@ Guests are identified by a client-chosen `sessionId` (query string or `x-session
 ### Fixed in the current working tree (uncommitted; verify with `git status` / `git log`)
 - **P0-8 done:** no JWT fallback secret; boot-time validation; seed admin password comes from env or is generated; login form no longer prefilled.
 - **P0-3 done:** `GET /bookings/slots` exists, validated (`YYYY-MM-DD`), UTC-based; covered by e2e tests.
-- **P0-1 in progress, not yet tested:** register now creates a `CustomerProfile`; `CustomersService.ensureProfile(userId)` added; `/orders/me/list` now uses `OrdersService.listMine`; admin `customerId` filter no longer falls through to "all orders". Code compiles, but **tests for P0-1 are not written yet**.
+- **P0-1 done:** register creates a `CustomerProfile`; `CustomersService.ensureProfile(userId)` backfills legacy users (idempotent, race-safe); `/orders/me/list` uses `OrdersService.listMine` and ignores client filters; the admin `customerId` filter matches nothing for an unknown id instead of falling through to all orders. Covered by `apps/api/test/customers-orders.e2e-spec.ts` (16 tests, mutation-checked against the three original bugs).
 
 ### Known open issues (from the audit; do not assume they are fixed)
 - **P0-2** Notifications: `userId = null` rows (contain customer name/phone) are returned to every logged-in user; `markRead` has no ownership check.
