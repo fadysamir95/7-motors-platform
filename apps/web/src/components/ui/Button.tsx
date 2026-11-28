@@ -5,14 +5,14 @@ type Variant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'onDar
 type Size = 'sm' | 'md' | 'lg';
 
 const base =
-  'inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+  'inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-lime-dark focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
 const variants: Record<Variant, string> = {
-  primary: 'bg-brand-orange text-white hover:bg-orange-600',
-  secondary: 'bg-brand-navy text-white hover:bg-brand-charcoal',
+  primary: 'bg-brand-lime text-brand-ink hover:bg-[color-mix(in_srgb,var(--lime)_82%,white)]',
+  secondary: 'bg-brand-ink text-brand-bone hover:bg-brand-ink-soft',
   outline: 'border border-border text-foreground hover:bg-slate-50',
   ghost: 'text-foreground hover:bg-slate-100',
   danger: 'bg-red-600 text-white hover:bg-red-700',
-  onDark: 'border border-white/30 text-white hover:bg-white/10 focus-visible:ring-offset-brand-navy',
+  onDark: 'border border-white/30 text-brand-bone hover:bg-white/10 focus-visible:ring-brand-lime focus-visible:ring-offset-brand-ink',
 };
 const sizes: Record<Size, string> = {
   sm: 'px-3 py-1.5 text-sm',

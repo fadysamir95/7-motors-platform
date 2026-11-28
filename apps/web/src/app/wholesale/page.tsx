@@ -52,10 +52,10 @@ export default function WholesalePage() {
               }} />
             </div>
           ))}
-          <button className="text-sm text-blue-600" onClick={() => setForm({ ...form, items: [...form.items, { productName: '', partCode: '', quantity: 1 }] })}>+ Add item</button>
+          <button className="text-sm font-semibold text-brand-ink underline underline-offset-4" onClick={() => setForm({ ...form, items: [...form.items, { productName: '', partCode: '', quantity: 1 }] })}>+ Add item</button>
         </div>
         <textarea className="w-full border rounded px-3 py-2" placeholder={t('notes')} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
-        <button onClick={submit} className="w-full bg-blue-600 text-white py-2 rounded">{t('submitWholesale')}</button>
+        <button onClick={submit} className="w-full bg-brand-lime font-semibold text-brand-ink hover:bg-[color-mix(in_srgb,var(--lime)_82%,white)] py-2 rounded">{t('submitWholesale')}</button>
       </div>
     </div>
   );

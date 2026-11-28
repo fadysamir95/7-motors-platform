@@ -47,7 +47,7 @@ export default function CartPage() {
       {cart?.items?.length ? (
         <div className="mt-6 flex justify-between items-center">
           <div className="text-xl font-bold">{t('total')}: {total}</div>
-          <Link href="/checkout" className="px-4 py-2 bg-blue-600 text-white rounded">{t('checkout')}</Link>
+          <Link href="/checkout" className="px-4 py-2 bg-brand-lime font-semibold text-brand-ink hover:bg-[color-mix(in_srgb,var(--lime)_82%,white)] rounded">{t('checkout')}</Link>
         </div>
       ) : null}
     </div>

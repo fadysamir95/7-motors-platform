@@ -39,7 +39,7 @@ function VehicleDetailPageContent() {
         {model ? <VehicleImage slug={model.slug} name={model.name} sizes="96px" className="h-16 w-24 shrink-0 rounded-lg" /> : null}
         <div>
           <h1 className="text-2xl font-bold">{model?.name || 'Vehicle'}</h1>
-          <Link href="/vehicles" className="text-sm text-brand-blue hover:underline">Change vehicle</Link>
+          <Link href="/vehicles" className="text-sm font-semibold text-brand-ink underline underline-offset-4">Change vehicle</Link>
         </div>
       </div>
       <div className="mb-4">
@@ -63,7 +63,7 @@ function VehicleDetailPageContent() {
                 <div className="text-sm text-muted">{p.partCode}</div>
                 <div className="text-sm text-muted">{t('countryOfOrigin')}: {p.countryOfOrigin}</div>
                 <div className="flex items-center justify-between mt-3">
-                  <div className="text-lg font-bold text-brand-navy">{p.price}</div>
+                  <div className="text-lg font-bold text-brand-ink">{p.price}</div>
                   <Badge tone={p.inventory?.stock > 0 ? 'green' : 'red'}>{p.inventory?.stock > 0 ? t('available') : t('outOfStock')}</Badge>
                 </div>
                 <Button className="mt-3 w-full" disabled={!p.inventory?.stock} onClick={async () => {

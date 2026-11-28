@@ -24,19 +24,19 @@ export default function Footer() {
   ].filter(Boolean) as { icon: typeof PhoneIcon; label: string; value: string; href?: string; ltr: boolean }[];
 
   return (
-    <footer className="bg-brand-navy text-slate-300">
+    <footer className="bg-brand-ink text-slate-300">
       <div className={`container-xl grid gap-10 py-14 ${contacts.length ? 'md:grid-cols-[1.4fr_1fr_1fr]' : 'md:grid-cols-[1.4fr_1fr]'}`}>
         <div>
-          <Image src="/brand/logo.webp" alt="7 MOTORS" width={640} height={229} sizes="168px" className="h-14 w-auto" />
+          <Image src="/brand/logo-dark-bg.png" alt="SEVEN MOTORS" width={3122} height={676} sizes="190px" className="h-10 w-auto" />
           <p className="mt-3 max-w-sm text-sm leading-relaxed">{t('footerAbout')}</p>
         </div>
 
         <nav aria-label={t('footerLinks')}>
-          <h2 className="mb-4 font-bold text-white">{t('footerLinks')}</h2>
+          <h2 className="mb-4 font-bold text-brand-bone">{t('footerLinks')}</h2>
           <ul className="space-y-2.5 text-sm">
             {LINKS.map((l) => (
               <li key={l.href}>
-                <Link href={l.href} className="transition hover:text-brand-orange">{t(l.label)}</Link>
+                <Link href={l.href} className="transition hover:text-brand-lime">{t(l.label)}</Link>
               </li>
             ))}
           </ul>
@@ -44,13 +44,13 @@ export default function Footer() {
 
         {contacts.length ? (
           <div>
-            <h2 className="mb-4 font-bold text-white">{t('footerContact')}</h2>
+            <h2 className="mb-4 font-bold text-brand-bone">{t('footerContact')}</h2>
             <ul className="space-y-3 text-sm">
               {contacts.map((c) => (
                 <li key={c.label} className="flex items-start gap-3">
-                  <c.icon className="mt-0.5 shrink-0 text-brand-orange" width={18} height={18} />
+                  <c.icon className="mt-0.5 shrink-0 text-brand-lime" width={18} height={18} />
                   {c.href ? (
-                    <a href={c.href} dir={c.ltr ? 'ltr' : undefined} className="transition hover:text-brand-orange">{c.value}</a>
+                    <a href={c.href} dir={c.ltr ? 'ltr' : undefined} className="transition hover:text-brand-lime">{c.value}</a>
                   ) : (
                     <span>{c.value}</span>
                   )}

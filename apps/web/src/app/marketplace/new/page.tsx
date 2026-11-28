@@ -82,7 +82,7 @@ export default function NewListingPage() {
           <input type="file" accept="image/*" multiple onChange={(e) => handleFiles(e.target.files)} />
           <div className="text-sm text-slate-500 mt-1">{images.length}/5</div>
         </div>
-        <button onClick={submit} className="w-full bg-blue-600 text-white py-2 rounded">{t('submitListing')}</button>
+        <button onClick={submit} className="w-full bg-brand-lime font-semibold text-brand-ink hover:bg-[color-mix(in_srgb,var(--lime)_82%,white)] py-2 rounded">{t('submitListing')}</button>
       </div>
     </div>
   );

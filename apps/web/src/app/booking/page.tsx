@@ -91,7 +91,7 @@ function BookingContent() {
                 key={s.startTime}
                 disabled={!s.available}
                 onClick={() => setForm({ ...form, startTime: s.startTime })}
-                className={`py-2 rounded text-sm ${form.startTime === s.startTime ? 'bg-blue-600 text-white' : 'bg-slate-100'} disabled:opacity-40`}
+                className={`py-2 rounded text-sm ${form.startTime === s.startTime ? 'bg-brand-ink text-brand-bone' : 'bg-slate-100'} disabled:opacity-40`}
               >
                 {s.startTime}
               </button>
@@ -100,7 +100,7 @@ function BookingContent() {
           {!slots.length ? <p className="text-sm text-slate-500">{t('noSlots')}</p> : null}
         </div>
         <textarea className="w-full border rounded px-3 py-2" placeholder={t('notes')} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
-        <button onClick={submit} className="w-full bg-blue-600 text-white py-2 rounded">{t('submitBooking')}</button>
+        <button onClick={submit} className="w-full bg-brand-lime font-semibold text-brand-ink hover:bg-[color-mix(in_srgb,var(--lime)_82%,white)] py-2 rounded">{t('submitBooking')}</button>
       </div>
     </div>
   );

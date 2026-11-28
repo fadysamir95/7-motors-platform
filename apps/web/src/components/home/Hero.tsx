@@ -69,8 +69,8 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative isolate overflow-hidden bg-brand-navy text-white lg:min-h-[44rem]">
-      {/* Photo: stacked above the text on mobile, on the end side (left in RTL) on desktop. It fades into the navy. */}
+    <section ref={sectionRef} className="relative isolate overflow-hidden bg-brand-ink text-brand-bone lg:min-h-[44rem]">
+      {/* Photo: stacked above the text on mobile, on the end side (left in RTL) on desktop. It fades into the ink. */}
       <div className="hero-photo-mask relative z-0 aspect-[16/10] w-full lg:absolute lg:inset-y-0 lg:end-0 lg:aspect-auto lg:w-[72%]">
         <div className="hero-car-in absolute inset-0">
           <div
@@ -83,16 +83,16 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Desktop navy scrim: opaque on the text side, clear toward the car. */}
+      {/* Desktop ink scrim: opaque on the text side, clear toward the car. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-10 hidden bg-linear-to-r from-brand-navy from-[28%] via-brand-navy/55 via-[42%] to-transparent to-[58%] rtl:bg-linear-to-l lg:block"
+        className="pointer-events-none absolute inset-0 z-10 hidden bg-linear-to-r from-brand-ink from-[28%] via-brand-ink/55 via-[42%] to-transparent to-[58%] rtl:bg-linear-to-l lg:block"
       />
 
       {/* Orange light: a pulsing glow under the car and two light streaks that travel along the floor and corner. */}
       <div
         aria-hidden="true"
-        className="hero-glow pointer-events-none absolute bottom-6 end-[6%] z-10 hidden h-56 w-[34rem] rounded-full bg-[radial-gradient(closest-side,rgb(249_115_22/0.34),transparent)] blur-2xl lg:block"
+        className="hero-glow pointer-events-none absolute bottom-6 end-[6%] z-10 hidden h-56 w-[34rem] rounded-full bg-[radial-gradient(closest-side,rgb(198_245_63/0.22),transparent)] blur-2xl lg:block"
       />
       <svg
         aria-hidden="true"
@@ -103,9 +103,9 @@ export default function Hero() {
       >
         <defs>
           <linearGradient id="hero-light" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0" stopColor="#f97316" stopOpacity="0" />
-            <stop offset="0.5" stopColor="#fb923c" stopOpacity="0.95" />
-            <stop offset="1" stopColor="#f97316" stopOpacity="0" />
+            <stop offset="0" stopColor="#c6f53f" stopOpacity="0" />
+            <stop offset="0.5" stopColor="#c6f53f" stopOpacity="0.95" />
+            <stop offset="1" stopColor="#c6f53f" stopOpacity="0" />
           </linearGradient>
           <linearGradient id="hero-edge" x1="0" x2="0" y1="0" y2="1">
             <stop offset="0" stopColor="#ffffff" stopOpacity="0" />
@@ -137,17 +137,17 @@ export default function Hero() {
       <div className="container-xl relative z-20 -mt-6 flex items-center pb-12 sm:pb-14 lg:mt-0 lg:min-h-[44rem] lg:py-20">
         <div className="max-w-2xl lg:max-w-xl xl:max-w-[38rem]">
           <p
-            className="hero-rise inline-flex items-center gap-2 rounded-full border border-brand-orange/50 bg-brand-orange/15 px-4 py-1.5 text-sm font-bold text-orange-300 sm:text-base"
+            className="hero-rise inline-flex items-center gap-2 rounded-full border border-brand-lime/50 bg-brand-lime/15 px-4 py-1.5 text-sm font-bold text-brand-lime sm:text-base"
             style={delay(100)}
           >
-            <span className="h-2 w-2 rounded-full bg-brand-orange" aria-hidden="true" />
+            <span className="h-2 w-2 rounded-full bg-brand-lime" aria-hidden="true" />
             {t('heroEyebrow')}
           </p>
-          <h1 className="mt-5 text-4xl font-extrabold leading-[1.2] tracking-tight text-white sm:text-5xl xl:text-6xl">
+          <h1 className="font-display mt-5 text-4xl font-extrabold leading-[1.2] tracking-tight text-brand-bone sm:text-5xl xl:text-6xl">
             <span className="hero-rise block" style={delay(220)}>
               {t('heroHeadline1')}
             </span>
-            <span className="hero-rise relative mt-1 inline-block text-brand-orange" style={delay(340)}>
+            <span className="hero-rise relative mt-1 inline-block text-brand-lime" style={delay(340)}>
               {t('heroHeadline2')}
               <svg
                 aria-hidden="true"
@@ -158,9 +158,9 @@ export default function Hero() {
               >
                 <defs>
                   <linearGradient id="hero-swoosh-grad" x1="0" x2="1" y1="0" y2="0">
-                    <stop offset="0" stopColor="#f97316" stopOpacity="0" />
-                    <stop offset="0.35" stopColor="#fb923c" stopOpacity="1" />
-                    <stop offset="1" stopColor="#f97316" stopOpacity="0.2" />
+                    <stop offset="0" stopColor="#c6f53f" stopOpacity="0" />
+                    <stop offset="0.35" stopColor="#c6f53f" stopOpacity="1" />
+                    <stop offset="1" stopColor="#c6f53f" stopOpacity="0.2" />
                   </linearGradient>
                 </defs>
                 <path d="M2 11 C70 3 190 2 318 8" stroke="url(#hero-swoosh-grad)" strokeWidth="3" strokeLinecap="round" fill="none" />
@@ -172,7 +172,7 @@ export default function Hero() {
           </p>
 
           <div className="hero-rise mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap" style={delay(600)}>
-            <ButtonLink href="#services" size="lg" className="hero-cta hero-cta-primary px-8 shadow-lg shadow-brand-orange/30">
+            <ButtonLink href="#services" size="lg" className="hero-cta hero-cta-primary px-8 shadow-lg shadow-brand-lime/30">
               {t('heroCtaPrimary')}
               <ArrowIcon className="hero-cta-icon" width={18} height={18} />
             </ButtonLink>
@@ -188,7 +188,7 @@ export default function Hero() {
           >
             {trust.map((label) => (
               <li key={label} className="flex items-center gap-2 whitespace-nowrap py-3 text-[15px] sm:px-4 sm:first:ps-0 sm:last:pe-0">
-                <CheckCircleIcon className="shrink-0 text-brand-orange" width={20} height={20} />
+                <CheckCircleIcon className="shrink-0 text-brand-lime" width={20} height={20} />
                 {label}
               </li>
             ))}
@@ -200,7 +200,7 @@ export default function Hero() {
       <a
         href="#services"
         aria-label={t('heroScroll')}
-        className="hero-rise absolute inset-x-0 bottom-5 z-20 mx-auto hidden w-fit rounded-full p-1 text-white/80 transition-colors hover:text-brand-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange lg:block"
+        className="hero-rise absolute inset-x-0 bottom-5 z-20 mx-auto hidden w-fit rounded-full p-1 text-brand-bone/80 transition-colors hover:text-brand-lime focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-lime lg:block"
         style={delay(1100)}
       >
         <span className="hero-bob flex flex-col items-center gap-1" aria-hidden="true">
@@ -208,7 +208,7 @@ export default function Hero() {
             <rect x="1" y="1" width="20" height="32" rx="10" stroke="currentColor" strokeWidth="1.6" />
             <rect className="hero-wheel" x="9.5" y="7" width="3" height="7" rx="1.5" fill="currentColor" />
           </svg>
-          <svg width="18" height="16" viewBox="0 0 18 16" fill="none" stroke="#f97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" focusable="false">
+          <svg width="18" height="16" viewBox="0 0 18 16" fill="none" stroke="#c6f53f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" focusable="false">
             <path d="M3 2l6 5 6-5M3 9l6 5 6-5" />
           </svg>
         </span>

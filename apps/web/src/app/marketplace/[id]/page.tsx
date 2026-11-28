@@ -33,7 +33,7 @@ function MarketplaceDetailPageContent() {
         <div>{t('condition')}: {listing.condition}</div>
         <div>{listing.description}</div>
       </div>
-      <button className="mt-4 px-4 py-2 bg-green-600 text-white rounded">Contact Seller</button>
+      <button className="mt-4 px-4 py-2 bg-brand-lime font-semibold text-brand-ink rounded">Contact Seller</button>
     </div>
   );
 }

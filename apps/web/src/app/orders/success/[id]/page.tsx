@@ -34,14 +34,14 @@ function OrderSuccessPageContent() {
         <div className="mt-6">
           <button
             onClick={() => router.push(`/booking?orderId=${order.id}`)}
-            className="px-6 py-3 bg-orange-500 text-white rounded text-lg"
+            className="px-6 py-3 bg-brand-lime font-semibold text-brand-ink hover:bg-[color-mix(in_srgb,var(--lime)_82%,white)] rounded text-lg"
           >
             {t('bookInstallation')}
           </button>
         </div>
       ) : null}
       <div className="mt-4">
-        <Link href="/" className="text-blue-600">Home</Link>
+        <Link href="/" className="font-semibold text-brand-ink underline underline-offset-4">Home</Link>
       </div>
     </div>
   );

@@ -1,45 +1,69 @@
 @import "tailwindcss";
 
+/*
+ * SEVEN MOTORS brand (Logo usage guide v1): four colours, nothing else.
+ *   Ink #1E1F1C        grounds, body text, labels on lime
+ *   Bone #F4F2EC       light grounds, the MOTORS word on dark
+ *   Lime #C6F53F       accents and button fills; ON INK (or as a fill with ink text), never as text on bone
+ *   Light lime #7FA21F the 7 and accents on light grounds only
+ * Everything else below is a tint of Ink and Bone.
+ */
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --brand-navy: #0f1f3d;
-  --brand-charcoal: #1f2937;
-  --brand-silver: #94a3b8;
-  --brand-orange: #f97316;
-  --brand-blue: #2563eb;
-  --card: #ffffff;
-  --border: #e2e8f0;
-  --muted: #64748b;
+  --ink: #1e1f1c;
+  --bone: #f4f2ec;
+  --lime: #c6f53f;
+  --lime-dark: #7fa21f;
+
+  --background: var(--bone);
+  --foreground: var(--ink);
+  --card: color-mix(in srgb, var(--bone) 35%, white);
+  --border: color-mix(in srgb, var(--ink) 13%, var(--bone));
+  --muted: color-mix(in srgb, var(--ink) 66%, var(--bone));
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-brand-navy: var(--brand-navy);
-  --color-brand-charcoal: var(--brand-charcoal);
-  --color-brand-silver: var(--brand-silver);
-  --color-brand-orange: var(--brand-orange);
-  --color-brand-blue: var(--brand-blue);
+  --color-brand-ink: var(--ink);
+  --color-brand-ink-soft: color-mix(in srgb, var(--ink) 88%, var(--bone));
+  --color-brand-bone: var(--bone);
+  --color-brand-lime: var(--lime);
+  --color-brand-lime-dark: var(--lime-dark);
   --color-card: var(--card);
   --color-border: var(--border);
   --color-muted: var(--muted);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-exo: var(--font-exo);
+  --font-archivo: var(--font-archivo);
+}
+
+/* Neutral greys are warm tints of Ink and Bone instead of Tailwind's cool slate. */
+@theme {
+  --color-slate-50: color-mix(in srgb, var(--bone) 45%, white);
+  --color-slate-100: var(--bone);
+  --color-slate-200: color-mix(in srgb, var(--ink) 9%, var(--bone));
+  --color-slate-300: color-mix(in srgb, var(--ink) 20%, var(--bone));
+  --color-slate-400: color-mix(in srgb, var(--ink) 40%, var(--bone));
+  --color-slate-500: color-mix(in srgb, var(--ink) 58%, var(--bone));
+  --color-slate-600: color-mix(in srgb, var(--ink) 70%, var(--bone));
+  --color-slate-700: color-mix(in srgb, var(--ink) 82%, var(--bone));
+  --color-slate-800: color-mix(in srgb, var(--ink) 92%, var(--bone));
+  --color-slate-900: var(--ink);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-tajawal), var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-tajawal), var(--font-tajawal-latin), var(--font-geist-sans), system-ui, sans-serif;
 }
 
 /* Arabic uses Tajawal; English keeps Geist (Tajawal is only a fallback for missing glyphs). */
 .font-ar {
-  font-family: var(--font-tajawal), system-ui, sans-serif;
+  font-family: var(--font-tajawal), var(--font-tajawal-latin), system-ui, sans-serif;
 }
 .font-en {
-  font-family: var(--font-geist-sans), var(--font-tajawal), system-ui, sans-serif;
+  font-family: var(--font-geist-sans), var(--font-tajawal), var(--font-tajawal-latin), system-ui, sans-serif;
 }
 
 .container-xl {
@@ -71,7 +95,7 @@ html {
 }
 
 /* ---------- Home hero (components/home/Hero.tsx) ---------- */
-/* The photo fades into the navy background: downward on mobile, toward the text on desktop. */
+/* The photo fades into the ink background: downward on mobile, toward the text on desktop. */
 .hero-photo-mask {
   -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
   mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
@@ -187,12 +211,12 @@ html {
 }
 .hero-cta-primary:hover,
 .hero-cta-primary:focus-visible {
-  box-shadow: 0 12px 32px -8px rgb(249 115 22 / 0.7);
+  box-shadow: 0 12px 32px -8px rgb(198 245 63 / 0.7);
 }
 .hero-cta-ghost:hover,
 .hero-cta-ghost:focus-visible {
-  border-color: var(--brand-orange);
-  background-color: rgb(249 115 22 / 0.12);
+  border-color: var(--lime);
+  background-color: rgb(198 245 63 / 0.12);
 }
 .hero-cta-icon {
   --nudge: -4px;
@@ -237,11 +261,11 @@ html {
 
 /* ---------- Home services (components/home/ServiceSelection.tsx) ---------- */
 .svc-section {
-  --svc-surface-top: color-mix(in srgb, var(--brand-navy) 94%, white);
-  --svc-surface-bottom: color-mix(in srgb, var(--brand-navy) 82%, black);
+  --svc-surface-top: color-mix(in srgb, var(--ink) 94%, white);
+  --svc-surface-bottom: color-mix(in srgb, var(--ink) 82%, black);
   background:
-    radial-gradient(ellipse 90% 70% at 50% 0%, var(--brand-navy), transparent 72%),
-    color-mix(in srgb, var(--brand-navy) 62%, black);
+    radial-gradient(ellipse 90% 70% at 50% 0%, var(--ink), transparent 72%),
+    color-mix(in srgb, var(--ink) 62%, black);
 }
 /* The light streaks are drawn for the RTL layout; mirror them for LTR. */
 [dir='ltr'] .svc-lights {
@@ -260,8 +284,8 @@ html {
 .svc-card:hover,
 .svc-card:focus-within {
   translate: 0 -8px;
-  border-color: rgb(249 115 22 / 0.75);
-  box-shadow: 0 0 0 1px rgb(249 115 22 / 0.35), 0 0 38px -6px rgb(249 115 22 / 0.45), 0 30px 60px -28px rgb(0 0 0 / 0.9);
+  border-color: rgb(198 245 63 / 0.75);
+  box-shadow: 0 0 0 1px rgb(198 245 63 / 0.35), 0 0 38px -6px rgb(198 245 63 / 0.45), 0 30px 60px -28px rgb(0 0 0 / 0.9);
 }
 .svc-media::before,
 .svc-media::after {
@@ -278,8 +302,8 @@ html {
 }
 .svc-media::after {
   height: 2px;
-  background: linear-gradient(to right, transparent, var(--brand-orange) 50%, transparent);
-  box-shadow: 0 0 18px 2px rgb(249 115 22 / 0.5);
+  background: linear-gradient(to right, transparent, var(--lime) 50%, transparent);
+  box-shadow: 0 0 18px 2px rgb(198 245 63 / 0.5);
   opacity: 0.55;
   transition: opacity 0.35s ease;
 }
@@ -289,29 +313,30 @@ html {
 }
 .svc-badge {
   z-index: 2;
-  box-shadow: 0 0 0 5px var(--svc-surface-top), 0 10px 24px -6px rgb(249 115 22 / 0.6);
+  box-shadow: 0 0 0 5px var(--svc-surface-top), 0 10px 24px -6px rgb(198 245 63 / 0.6);
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 .svc-card:hover .svc-badge,
 .svc-card:focus-within .svc-badge {
   transform: scale(1.08) rotate(-4deg);
-  box-shadow: 0 0 0 5px var(--svc-surface-top), 0 0 28px 2px rgb(249 115 22 / 0.7);
+  box-shadow: 0 0 0 5px var(--svc-surface-top), 0 0 28px 2px rgb(198 245 63 / 0.7);
 }
 
-/* CTA: outlined pill that fills orange when the card (or the button) is hovered or focused. */
+/* CTA: outlined pill that fills lime when the card (or the button) is hovered or focused. */
 .svc-cta {
   border-radius: 9999px;
   border: 2px solid rgb(255 255 255 / 0.8);
   background: transparent;
-  color: #fff;
+  color: var(--bone);
   transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, translate 0.3s ease;
 }
 .svc-card:hover .svc-cta,
 .svc-cta:hover,
 .svc-cta:focus-visible {
-  background-color: var(--brand-orange);
-  border-color: var(--brand-orange);
-  box-shadow: 0 10px 28px -8px rgb(249 115 22 / 0.7);
+  background-color: var(--lime);
+  border-color: var(--lime);
+  color: var(--ink);
+  box-shadow: 0 10px 28px -8px rgb(198 245 63 / 0.5);
 }
 .svc-cta:hover {
   translate: 0 -2px;
@@ -385,4 +410,21 @@ html {
   .svc-card img {
     scale: none !important;
   }
+}
+
+/* ---------- Brand type (Logo usage guide: Exo 2 for numbers and prices, Archivo Expanded for headings) ---------- */
+.font-price {
+  font-family: var(--font-exo), var(--font-tajawal), var(--font-tajawal-latin), system-ui, sans-serif;
+  font-style: italic;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+/* Latin-only treatment: italic expanded capitals would distort Arabic, so Arabic headings keep Tajawal. */
+html[lang='en'] .font-display {
+  font-family: var(--font-archivo), var(--font-geist-sans), system-ui, sans-serif;
+  font-style: italic;
+  font-weight: 900;
+  font-stretch: 125%;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
 }

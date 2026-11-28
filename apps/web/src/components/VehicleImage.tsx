@@ -23,7 +23,7 @@ export default function VehicleImage({
 }) {
   const img = vehicleImage(slug);
   return (
-    <div className={`relative overflow-hidden bg-brand-navy ${className}`}>
+    <div className={`relative overflow-hidden bg-brand-ink ${className}`}>
       {img ? (
         <Image
           src={img.src}
@@ -35,7 +35,7 @@ export default function VehicleImage({
           className={`object-cover ${imgClassName}`}
         />
       ) : (
-        <div className="grid h-full w-full place-items-center bg-linear-to-br from-brand-navy to-brand-charcoal text-white/40" role="img" aria-label={name}>
+        <div className="grid h-full w-full place-items-center bg-linear-to-br from-brand-ink to-brand-ink-soft text-white/40" role="img" aria-label={name}>
           <CarIcon width={48} height={48} strokeWidth={1.2} />
         </div>
       )}

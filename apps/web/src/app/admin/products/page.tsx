@@ -45,7 +45,7 @@ export default function AdminProductsPage() {
           {models.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
         </select>
         <input type="number" className="border rounded px-2 py-1" placeholder="Year" value={form.year} onChange={(e) => setForm({ ...form, year: Number(e.target.value) })} />
-        <button onClick={create} className="bg-blue-600 text-white rounded px-3">Create</button>
+        <button onClick={create} className="bg-brand-lime font-semibold text-brand-ink hover:bg-[color-mix(in_srgb,var(--lime)_82%,white)] rounded px-3">Create</button>
       </div>
       <table className="w-full text-sm border">
         <thead><tr className="bg-slate-50"><th className="p-2">SKU</th><th className="p-2">Name</th><th className="p-2">Price</th><th className="p-2">Stock</th><th className="p-2">Actions</th></tr></thead>

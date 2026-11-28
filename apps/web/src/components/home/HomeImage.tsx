@@ -25,7 +25,7 @@ export default function HomeImage({
 
   if (cfg.src) {
     return (
-      <div className={`relative overflow-hidden bg-brand-navy ${className}`}>
+      <div className={`relative overflow-hidden bg-brand-ink ${className}`}>
         <Image
           src={cfg.src}
           alt={cfg.alt[locale]}
@@ -43,7 +43,7 @@ export default function HomeImage({
 
   const Icon = ICONS[cfg.icon ?? 'car'];
   return (
-    <div aria-hidden="true" className={`relative grid place-items-center overflow-hidden bg-brand-navy text-white/30 ${className}`}>
+    <div aria-hidden="true" className={`relative grid place-items-center overflow-hidden bg-brand-ink text-white/30 ${className}`}>
       <Icon width={64} height={64} strokeWidth={1.1} />
     </div>
   );

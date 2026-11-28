@@ -24,13 +24,13 @@ export default function Categories() {
 
   return (
     <section className="container-xl py-16">
-      <h2 className="text-3xl font-bold text-center text-brand-navy mb-10">تصفح حسب الفئة</h2>
+      <h2 className="text-3xl font-bold text-center text-brand-ink mb-10">تصفح حسب الفئة</h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {list.map((c, i) => (
           <Card key={i} className="hover:shadow-md transition cursor-pointer">
             <CardBody className="p-6 text-center">
               <div className="text-4xl mb-3">{c.icon}</div>
-              <div className="font-semibold text-brand-navy">{c.name}</div>
+              <div className="font-semibold text-brand-ink">{c.name}</div>
             </CardBody>
           </Card>
         ))}

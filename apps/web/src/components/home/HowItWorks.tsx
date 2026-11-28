@@ -14,8 +14,8 @@ export default function HowItWorks() {
   return (
     <section aria-labelledby="how-title" className="container-xl py-16 md:py-20">
       <div className="mb-12 text-center">
-        <h2 id="how-title" className="text-3xl font-extrabold text-brand-navy md:text-4xl">{t('howTitle')}</h2>
-        <div className="mx-auto mt-3 h-1 w-12 rounded-full bg-brand-orange" aria-hidden="true" />
+        <h2 id="how-title" className="font-display text-3xl font-extrabold text-brand-ink md:text-4xl">{t('howTitle')}</h2>
+        <div className="mx-auto mt-3 h-1 w-12 rounded-full bg-brand-lime-dark" aria-hidden="true" />
         <p className="mt-4 text-slate-600">{t('howSubtitle')}</p>
       </div>
       <ol className="relative grid gap-10 md:grid-cols-3 md:gap-6">
@@ -24,14 +24,14 @@ export default function HowItWorks() {
         {STEPS.map(({ icon: Icon, title, desc }, i) => (
           <li key={title} className="relative flex flex-col items-center text-center">
             <div className="relative">
-              <div className="grid h-16 w-16 place-items-center rounded-2xl border border-border bg-card text-brand-navy shadow-[0_8px_24px_-12px_rgb(15_31_61/0.25)]">
+              <div className="grid h-16 w-16 place-items-center rounded-2xl border border-border bg-card text-brand-ink shadow-[0_8px_24px_-12px_rgb(30_31_28/0.25)]">
                 <Icon width={28} height={28} />
               </div>
-              <span className="absolute -end-2 -top-2 grid h-7 w-7 place-items-center rounded-full bg-brand-orange text-sm font-bold text-white ring-4 ring-background">
+              <span className="absolute -end-2 -top-2 grid h-7 w-7 place-items-center rounded-full bg-brand-ink text-sm font-bold text-brand-lime ring-4 ring-background">
                 {i + 1}
               </span>
             </div>
-            <h3 className="mt-5 text-lg font-bold text-brand-navy">{t(title)}</h3>
+            <h3 className="mt-5 text-lg font-bold text-brand-ink">{t(title)}</h3>
             <p className="mt-1.5 max-w-xs text-base leading-relaxed text-slate-600">{t(desc)}</p>
           </li>
         ))}

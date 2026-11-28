@@ -15,7 +15,7 @@ export default function AdminNotificationsPage() {
           <div key={n.id} className={`border rounded p-3 ${n.isRead ? 'opacity-60' : ''}`}>
             <div className="font-semibold">{n.title}</div>
             <div className="text-sm text-muted">{n.body}</div>
-            {!n.isRead ? <button onClick={async () => { await apiPatch(`/notifications/${n.id}/read`); load(); }} className="text-sm text-blue-600 mt-1">Mark read</button> : null}
+            {!n.isRead ? <button onClick={async () => { await apiPatch(`/notifications/${n.id}/read`); load(); }} className="text-sm font-semibold text-brand-ink underline underline-offset-4 mt-1">Mark read</button> : null}
           </div>
         ))}
       </div>

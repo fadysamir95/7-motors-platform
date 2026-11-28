@@ -22,12 +22,12 @@ export default function VehicleShowcase() {
   return (
     <section className="container-xl py-16">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-brand-navy">اختار عربيتك</h2>
+        <h2 className="text-3xl font-bold text-brand-ink">اختار عربيتك</h2>
         <p className="text-muted mt-2">حدد موديل سيارتك للوصول إلى قطع الغيار المناسبة ليها.</p>
       </div>
       <div className="max-w-md mx-auto mb-8">
         <input
-          className="w-full border border-border rounded-xl px-4 py-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-orange/40"
+          className="w-full border border-border rounded-xl px-4 py-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-lime-dark/60"
           placeholder="ابحث عن موديل..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -50,7 +50,7 @@ export default function VehicleShowcase() {
                   )}
                 </div>
                 <CardBody className="p-4">
-                  <div className="font-bold text-brand-navy">{m.name}</div>
+                  <div className="font-bold text-brand-ink">{m.name}</div>
                   <div className="text-sm text-muted mt-1">2010 - Present</div>
                 </CardBody>
               </Card>
@@ -59,7 +59,7 @@ export default function VehicleShowcase() {
         </div>
       )}
       <div className="text-center mt-8">
-        <Link href="/vehicles" className="text-brand-blue hover:underline">عرض جميع المركبات</Link>
+        <Link href="/vehicles" className="font-semibold text-brand-ink underline underline-offset-4">عرض جميع المركبات</Link>
       </div>
     </section>
   );

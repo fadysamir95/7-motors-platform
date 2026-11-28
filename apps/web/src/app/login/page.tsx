@@ -28,7 +28,7 @@ export default function LoginPage() {
         <input className="w-full border rounded px-3 py-2" value={email} onChange={(e) => setEmail(e.target.value)} />
         <input type="password" className="w-full border rounded px-3 py-2" value={password} onChange={(e) => setPassword(e.target.value)} />
         {err ? <div className="text-red-500 text-sm">{err}</div> : null}
-        <button onClick={submit} className="w-full bg-blue-600 text-white py-2 rounded">{t('login')}</button>
+        <button onClick={submit} className="w-full bg-brand-lime font-semibold text-brand-ink hover:bg-[color-mix(in_srgb,var(--lime)_82%,white)] py-2 rounded">{t('login')}</button>
       </div>
     </div>
   );

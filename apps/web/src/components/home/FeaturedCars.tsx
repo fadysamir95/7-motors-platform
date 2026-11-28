@@ -78,16 +78,16 @@ export default function FeaturedCars() {
   };
 
   return (
-    <section aria-labelledby="cars-title" className="bg-white py-16 md:py-20">
+    <section aria-labelledby="cars-title" className="bg-card py-16 md:py-20">
       <div className="container-xl">
         <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 id="cars-title" className="text-3xl font-extrabold text-brand-navy md:text-4xl">{t('carsTitle')}</h2>
-            <div className="mt-3 h-1 w-14 rounded-full bg-brand-orange" aria-hidden="true" />
+            <h2 id="cars-title" className="font-display text-3xl font-extrabold text-brand-ink md:text-4xl">{t('carsTitle')}</h2>
+            <div className="mt-3 h-1 w-14 rounded-full bg-brand-lime-dark" aria-hidden="true" />
             <p className="mt-4 text-lg text-slate-600">{t('carsSubtitle')}</p>
           </div>
           {state.status === 'ready' && state.items.length > 0 ? (
-            <Link href="/marketplace" className="inline-flex items-center gap-2 text-base font-bold text-brand-orange hover:underline">
+            <Link href="/marketplace" className="inline-flex items-center gap-2 text-base font-bold text-brand-ink underline decoration-brand-lime-dark decoration-2 underline-offset-4 hover:decoration-brand-ink">
               {t('carsViewAll')}
               <ArrowIcon width={16} height={16} />
             </Link>
@@ -146,7 +146,7 @@ export default function FeaturedCars() {
                 <li key={l.id}>
                   <Link
                     href={href}
-                    className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[0_1px_2px_rgb(15_31_61/0.06),0_12px_28px_-14px_rgb(15_31_61/0.25)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_2px_4px_rgb(15_31_61/0.08),0_24px_44px_-18px_rgb(15_31_61/0.4)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+                    className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[0_1px_2px_rgb(30_31_28/0.06),0_12px_28px_-14px_rgb(30_31_28/0.25)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_2px_4px_rgb(30_31_28/0.08),0_24px_44px_-18px_rgb(30_31_28/0.4)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-lime"
                   >
                     <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
                       {photo?.url ? (
@@ -172,29 +172,29 @@ export default function FeaturedCars() {
                           />
                         )
                       ) : (
-                        <div className="grid h-full w-full place-items-center bg-brand-navy text-white/30" aria-hidden="true">
+                        <div className="grid h-full w-full place-items-center bg-brand-ink text-white/30" aria-hidden="true">
                           <CarIcon width={56} height={56} strokeWidth={1.2} />
                         </div>
                       )}
                       <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-black/35 to-transparent" />
-                      <span className="absolute start-3 top-3 rounded-full bg-brand-navy px-3 py-1 text-sm font-bold text-white shadow">
+                      <span className="absolute start-3 top-3 rounded-full bg-brand-ink px-3 py-1 text-sm font-bold text-brand-bone shadow">
                         {l.year}
                       </span>
                     </div>
                     <div className="flex flex-1 flex-col p-5">
-                      <h3 className="text-lg font-bold leading-snug text-brand-navy">{title}</h3>
-                      <p className="mt-2 text-2xl font-extrabold text-brand-orange" dir="ltr" style={{ textAlign: 'start' }}>
-                        {formatPrice(l.price, locale)}
+                      <h3 className="text-lg font-bold leading-snug text-brand-ink">{title}</h3>
+                      <p className="mt-2 text-2xl text-brand-ink" dir="ltr" style={{ textAlign: 'start' }}>
+                        <PriceText value={formatPrice(l.price, locale)} />
                       </p>
                       <ul className="mt-4 grid grid-cols-3 gap-2 border-t border-border pt-4 text-sm text-slate-700">
                         {specs.map(({ icon: Icon, text }) => (
                           <li key={text} className="flex flex-col items-center gap-1.5 text-center">
-                            <Icon width={20} height={20} className="text-brand-navy" />
+                            <Icon width={20} height={20} className="text-brand-ink" />
                             <span className="leading-tight">{text}</span>
                           </li>
                         ))}
                       </ul>
-                      <span className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg bg-brand-navy px-4 py-2.5 text-center text-base font-semibold text-white transition group-hover:bg-brand-orange">
+                      <span className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg bg-brand-ink px-4 py-2.5 text-center text-base font-semibold text-brand-bone transition group-hover:bg-brand-lime group-hover:text-brand-ink">
                         {t('carsViewDetails')}
                         <ArrowIcon width={16} height={16} />
                       </span>
@@ -207,6 +207,21 @@ export default function FeaturedCars() {
         ) : null}
       </div>
     </section>
+  );
+}
+
+/** Digits use Exo 2 Black Italic (brand numerals). The Arabic currency label keeps the body font, since italic Arabic would be synthesised. */
+function PriceText({ value }: { value: string }) {
+  return (
+    <>
+      {value.split(/(\d[\d,]*)/).map((part, i) =>
+        i % 2 === 1 ? (
+          <span key={i} className="font-price text-[1.15em]">{part}</span>
+        ) : (
+          <span key={i} className="font-extrabold">{part}</span>
+        ),
+      )}
+    </>
   );
 }
 
@@ -223,10 +238,10 @@ function Message({
 }) {
   return (
     <div role={role} className="mx-auto flex max-w-xl flex-col items-center rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center">
-      <div className="grid h-14 w-14 place-items-center rounded-2xl bg-brand-navy text-brand-orange" aria-hidden="true">
+      <div className="grid h-14 w-14 place-items-center rounded-2xl bg-brand-ink text-brand-lime" aria-hidden="true">
         <CarIcon width={28} height={28} />
       </div>
-      <h3 className="mt-5 text-lg font-bold text-brand-navy">{title}</h3>
+      <h3 className="mt-5 text-lg font-bold text-brand-ink">{title}</h3>
       {desc ? <p className="mt-1 text-slate-600">{desc}</p> : null}
       <div className="mt-6">{children}</div>
     </div>

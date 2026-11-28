@@ -11,9 +11,9 @@ const services = [
 
 export default function Services() {
   return (
-    <section className="bg-[#F5F7FA] py-16">
+    <section className="bg-slate-50 py-16">
       <div className="container-xl">
-        <h2 className="text-3xl font-bold text-center text-brand-navy mb-10">خدماتنا</h2>
+        <h2 className="text-3xl font-bold text-center text-brand-ink mb-10">خدماتنا</h2>
         <div className="grid md:grid-cols-3 gap-6">
           {services.map((s) => (
             <Card key={s.title} className="overflow-hidden hover:shadow-lg transition group">
@@ -21,7 +21,7 @@ export default function Services() {
                 <img src={s.img} alt={s.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
               </div>
               <CardBody className="p-6">
-                <h3 className="text-xl font-bold text-brand-navy">{s.title}</h3>
+                <h3 className="text-xl font-bold text-brand-ink">{s.title}</h3>
                 <p className="text-muted mt-2">{s.desc}</p>
                 <div className="mt-4">
                   <Link href={s.href}><Button variant="secondary">{s.cta}</Button></Link>

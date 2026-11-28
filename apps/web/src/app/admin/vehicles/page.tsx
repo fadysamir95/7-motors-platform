@@ -20,7 +20,7 @@ export default function AdminVehiclesPage() {
       <div className="flex gap-2 mb-4">
         <input className="border rounded px-2 py-1" placeholder="Slug" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} />
         <input className="border rounded px-2 py-1" placeholder="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-        <button onClick={create} className="bg-blue-600 text-white rounded px-3">Create</button>
+        <button onClick={create} className="bg-brand-lime font-semibold text-brand-ink hover:bg-[color-mix(in_srgb,var(--lime)_82%,white)] rounded px-3">Create</button>
       </div>
       <ul className="space-y-1">
         {models.map((m) => <li key={m.id} className="border rounded px-3 py-2">{m.name} ({m.slug})</li>)}

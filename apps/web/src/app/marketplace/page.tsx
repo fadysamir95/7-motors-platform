@@ -17,7 +17,7 @@ export default function MarketplacePage() {
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">{t('navMarketplace')}</h1>
-        <Link href="/marketplace/new" className="px-4 py-2 bg-blue-600 text-white rounded">{t('submitListing')}</Link>
+        <Link href="/marketplace/new" className="px-4 py-2 bg-brand-lime font-semibold text-brand-ink hover:bg-[color-mix(in_srgb,var(--lime)_82%,white)] rounded">{t('submitListing')}</Link>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {listings.map((l) => (

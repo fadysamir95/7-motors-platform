@@ -61,7 +61,7 @@ export default function CheckoutPage() {
           </select>
         </div>
         <textarea className="w-full border rounded px-3 py-2" placeholder={t('notes')} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
-        <button disabled={loading} onClick={submit} className="w-full bg-blue-600 text-white py-2 rounded disabled:opacity-50">
+        <button disabled={loading} onClick={submit} className="w-full bg-brand-lime font-semibold text-brand-ink hover:bg-[color-mix(in_srgb,var(--lime)_82%,white)] py-2 rounded disabled:opacity-50">
           {loading ? '...' : t('submit')}
         </button>
       </div>
