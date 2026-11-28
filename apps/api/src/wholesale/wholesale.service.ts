@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePartsRequestDto } from './dto/create-parts-request.dto';
+import { CreateWholesaleRequestDto, UpdateWholesaleStatusDto } from './dto/create-wholesale-request.dto';
 
 /** Marks wholesale rows that came from the shopper "can't find my part" form, so staff can tell them apart. */
 export const PARTS_REQUEST_TYPE = 'PARTS_REQUEST';
@@ -9,7 +10,7 @@ export const PARTS_REQUEST_TYPE = 'PARTS_REQUEST';
 export class WholesaleService {
   constructor(private prisma: PrismaService) {}
 
-  async createRequest(dto: any) {
+  async createRequest(dto: CreateWholesaleRequestDto) {
     const req = await this.prisma.wholesaleRequest.create({
       data: {
         businessName: dto.businessName,
@@ -21,7 +22,7 @@ export class WholesaleService {
         businessType: dto.businessType,
         notes: dto.notes,
         items: {
-          create: (dto.items || []).map((i: any) => ({
+          create: dto.items.map((i) => ({
             productName: i.productName,
             partCode: i.partCode,
             modelId: i.modelId,
@@ -80,9 +81,9 @@ export class WholesaleService {
     return r;
   }
 
-  async updateStatus(id: string, status: string, note?: string, userId?: string) {
+  async updateStatus(id: string, status: UpdateWholesaleStatusDto['status'], note?: string, userId?: string) {
     await this.getRequest(id);
-    const updated = await this.prisma.wholesaleRequest.update({ where: { id }, data: { status: status as any } });
+    const updated = await this.prisma.wholesaleRequest.update({ where: { id }, data: { status } });
     if (note) await this.prisma.wholesaleNote.create({ data: { requestId: id, note, createdBy: userId } });
     return updated;
   }
@@ -92,7 +93,7 @@ export class WholesaleService {
     return this.prisma.wholesaleNote.create({ data: { requestId: id, note, createdBy: userId } });
   }
 
-  async addQuotation(id: string, amount: number, details: string, userId?: string) {
+  async addQuotation(id: string, amount: number | undefined, details: string | undefined, userId?: string) {
     await this.getRequest(id);
     return this.prisma.wholesaleQuotation.create({ data: { requestId: id, amount, details, createdBy: userId } });
   }

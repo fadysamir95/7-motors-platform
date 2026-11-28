@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Patch, Body, Param, Query, UseGuards, Req } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { MarketplaceService } from './marketplace.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { OptionalJwtAuthGuard } from '../auth/guards/optional-jwt-auth.guard';
@@ -21,6 +22,7 @@ export class MarketplaceController {
   }
 
   @Post('listings')
+  @Throttle({ default: { limit: 10, ttl: 3_600_000 } })
   @UseGuards(OptionalJwtAuthGuard)
   create(@Req() req: any, @Body() body: any) {
     return this.service.createListing(req.user?.id, body);

@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
@@ -7,8 +8,17 @@ import compression from 'compression';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const config = app.get(ConfigService);
+
+  // Behind a reverse proxy or load balancer, set TRUST_PROXY to the number of proxies in front of the API so the real
+  // client address (used by the rate limiter and the audit log) is read from X-Forwarded-For. Leave it unset otherwise.
+  const proxies = Number(config.get('TRUST_PROXY'));
+  if (Number.isInteger(proxies) && proxies > 0) app.set('trust proxy', proxies);
+
+  // Bodies are capped (1 MB covers a 500-row CSV import); anything bigger is refused before it is parsed.
+  app.useBodyParser('json', { limit: '1mb' });
+  app.useBodyParser('urlencoded', { limit: '100kb', extended: true });
 
   app.use(helmet());
   app.use(compression());

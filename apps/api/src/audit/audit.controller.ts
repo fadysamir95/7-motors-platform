@@ -3,6 +3,7 @@ import { AuditService } from './audit.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { AuditQueryDto } from './dto/audit-query.dto';
 
 @Controller('audit-logs')
 export class AuditController {
@@ -10,5 +11,5 @@ export class AuditController {
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  list(@Query() query: any) { return this.service.list(query); }
+  list(@Query() query: AuditQueryDto) { return this.service.list(query); }
 }

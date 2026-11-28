@@ -72,6 +72,7 @@ describe('Customer profiles and order ownership (e2e)', () => {
     await prisma.cartItem.deleteMany({ where: { productId } });
     await prisma.cart.deleteMany({ where: { OR: [{ userId: { in: userIds } }, { sessionId: { in: sessionIds } }] } });
     await prisma.product.deleteMany({ where: { id: productId } }); // inventory cascades
+    await prisma.auditLog.deleteMany({ where: { userId: { in: userIds } } }); // written by the audit interceptor for staff writes
     await prisma.userRole.deleteMany({ where: { userId: { in: userIds } } });
     await prisma.customerProfile.deleteMany({ where: { id: { in: profileIds } } });
     await prisma.user.deleteMany({ where: { id: { in: userIds } } });

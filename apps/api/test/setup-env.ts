@@ -10,3 +10,5 @@ if (!new URL(url).pathname.endsWith('_test')) {
 process.env.DATABASE_URL = url;
 process.env.JWT_SECRET = randomBytes(48).toString('hex');
 process.env.NODE_ENV = 'test';
+// Rate limiting would trip over the many requests the suites send from one address; its own suite switches it on.
+process.env.RATE_LIMIT = 'off';

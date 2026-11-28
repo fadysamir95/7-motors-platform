@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Patch, Body, Param, Query, UseGuards, Req } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
+import { Throttle } from '@nestjs/throttler';
 import { SlotsQueryDto } from './dto/slots-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { OptionalJwtAuthGuard } from '../auth/guards/optional-jwt-auth.guard';
@@ -23,6 +24,7 @@ export class BookingsController {
   }
 
   @Post()
+  @Throttle({ default: { limit: 10, ttl: 600_000 } })
   @UseGuards(OptionalJwtAuthGuard)
   create(@Req() req: any, @Body() dto: CreateBookingDto) {
     return this.service.createBooking(req.user?.id, dto);

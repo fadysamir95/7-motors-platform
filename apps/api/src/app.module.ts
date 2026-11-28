@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { validateEnv } from './config/env.validation';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
@@ -19,6 +21,12 @@ import { NotificationsModule } from './notifications/notifications.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnv }),
+    // Every route is rate limited per client address (generous default; the sensitive routes set stricter limits).
+    // The counters live in memory, so with several API instances they are per instance. RATE_LIMIT=off disables it (tests only).
+    ThrottlerModule.forRoot({
+      throttlers: [{ name: 'default', ttl: 60_000, limit: 300 }],
+      skipIf: () => process.env.RATE_LIMIT === 'off',
+    }),
     PrismaModule,
     AuthModule,
     VehiclesModule,
@@ -35,6 +43,6 @@ import { NotificationsModule } from './notifications/notifications.module';
     NotificationsModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
 export class AppModule {}

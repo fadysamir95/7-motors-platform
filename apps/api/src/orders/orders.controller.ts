@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Patch, Body, Param, Query, UseGuards, Req } from '@nestjs/common';
 import { OrdersService } from './orders.service';
+import { Throttle } from '@nestjs/throttler';
 import { CheckoutDto } from './dto/checkout.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { OptionalJwtAuthGuard } from '../auth/guards/optional-jwt-auth.guard';
@@ -12,6 +13,7 @@ export class OrdersController {
   constructor(private service: OrdersService) {}
 
   @Post('checkout')
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
   @UseGuards(OptionalJwtAuthGuard)
   checkout(@Req() req: any, @Body() dto: CheckoutDto) {
     const userId = req.user?.id;
