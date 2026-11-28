@@ -1,5 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreatePartsRequestDto } from './dto/create-parts-request.dto';
+
+/** Marks wholesale rows that came from the shopper "can't find my part" form, so staff can tell them apart. */
+export const PARTS_REQUEST_TYPE = 'PARTS_REQUEST';
 
 @Injectable()
 export class WholesaleService {
@@ -28,6 +32,27 @@ export class WholesaleService {
       },
       include: { items: true },
     });
+    return req;
+  }
+
+  async createPartsRequest(dto: CreatePartsRequestDto) {
+    if (dto.modelId) {
+      const model = await this.prisma.vehicleModel.findUnique({ where: { id: dto.modelId }, select: { id: true } });
+      if (!model) throw new BadRequestException('Unknown vehicle model');
+    }
+    const req = await this.prisma.wholesaleRequest.create({
+      data: {
+        businessName: dto.fullName,
+        contactPerson: dto.fullName,
+        phone: dto.phone,
+        email: dto.email,
+        businessType: PARTS_REQUEST_TYPE,
+        notes: dto.notes,
+        items: { create: [{ productName: dto.partName, modelId: dto.modelId, quantity: dto.quantity ?? 1, notes: dto.notes }] },
+      },
+      select: { id: true, status: true, createdAt: true },
+    });
+    // Only the reference is returned: the submitted contact details are not echoed back to an anonymous caller.
     return req;
   }
 

@@ -4,6 +4,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { CreatePartsRequestDto } from './dto/create-parts-request.dto';
 
 @Controller('wholesale')
 export class WholesaleController {
@@ -12,6 +13,12 @@ export class WholesaleController {
   @Post('requests')
   create(@Body() body: any) {
     return this.service.createRequest(body);
+  }
+
+  /** Public: a shopper asks for a part that is not in the catalog. Staff see it in the wholesale request list. */
+  @Post('parts-requests')
+  createPartsRequest(@Body() dto: CreatePartsRequestDto) {
+    return this.service.createPartsRequest(dto);
   }
 
   @Get('requests')
