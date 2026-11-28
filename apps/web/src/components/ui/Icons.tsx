@@ -27,6 +27,10 @@ export const ArrowIcon = (p: IconProps) => (
   <Svg {...p} className={`rtl:-scale-x-100 ${p.className ?? ''}`}><path d="M5 12h14M13 6l6 6-6 6" /></Svg>
 );
 export const SearchIcon = (p: IconProps) => <Svg {...p}><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4.5 4.5" /></Svg>;
+export const StoreIcon = (p: IconProps) => <Svg {...p}><path d="M3 9.5L4.6 4h14.8L21 9.5" /><path d="M3 9.5a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0" /><path d="M5 12.5V20h14v-7.5" /><path d="M10 20v-5h4v5" /></Svg>;
+export const TruckIcon = (p: IconProps) => <Svg {...p}><path d="M3 6.5h11V16H3z" /><path d="M14 9.5h4l3 3.2V16h-7" /><circle cx="7.5" cy="17.5" r="1.8" /><circle cx="17" cy="17.5" r="1.8" /></Svg>;
+export const CashIcon = (p: IconProps) => <Svg {...p}><rect x="2" y="6" width="20" height="12" rx="2.5" /><circle cx="12" cy="12" r="2.8" /><path d="M6 12h.01M18 12h.01" /></Svg>;
+export const CreditCardIcon = (p: IconProps) => <Svg {...p}><rect x="2" y="5" width="20" height="14" rx="2.5" /><path d="M2 10h20M6 15h4" /></Svg>;
 export const MenuIcon = (p: IconProps) => <Svg {...p}><path d="M4 7h16M4 12h16M4 17h16" /></Svg>;
 export const CloseIcon = (p: IconProps) => <Svg {...p}><path d="M6 6l12 12M18 6L6 18" /></Svg>;
 export const CartIcon = (p: IconProps) => (

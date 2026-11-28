@@ -1,7 +1,8 @@
-import { IsInt, IsOptional, IsString, IsEnum } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsString, Max, MaxLength, Min } from 'class-validator';
 
 export class AdjustStockDto {
-  @IsInt() quantity: number;
-  @IsOptional() @IsString() note?: string;
+  /** IN and OUT take a positive number of units; ADJUSTMENT takes a signed correction (never 0). */
+  @IsInt() @Min(-1_000_000) @Max(1_000_000) quantity: number;
+  @IsOptional() @IsString() @MaxLength(200) note?: string;
   @IsOptional() @IsEnum(['IN', 'OUT', 'ADJUSTMENT']) type?: 'IN' | 'OUT' | 'ADJUSTMENT';
 }

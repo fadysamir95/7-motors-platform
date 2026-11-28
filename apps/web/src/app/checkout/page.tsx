@@ -9,7 +9,7 @@ import { useLocale } from '@/components/LocaleProvider';
 import { ButtonLink } from '@/components/ui/Button';
 import CarLoader from '@/components/ui/CarLoader';
 import PriceText from '@/components/PriceText';
-import { ArrowIcon, CarIcon, CheckIcon, PartsIcon, PinIcon, WrenchIcon } from '@/components/ui/Icons';
+import { ArrowIcon, CashIcon, CheckIcon, CreditCardIcon, PartsIcon, StoreIcon, TruckIcon } from '@/components/ui/Icons';
 
 type Form = {
   guestName: string;
@@ -232,8 +232,8 @@ export default function CheckoutPage() {
                   {t('coReceive')}
                 </h2>
                 <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  <Choice name="fulfillment" checked={form.fulfillmentMethod === 'PICKUP'} onChange={() => set('fulfillmentMethod', 'PICKUP')} icon={<WrenchIcon width={22} height={22} />} title={t('branchPickup')} desc={t('coPickupDesc')} />
-                  <Choice name="fulfillment" checked={form.fulfillmentMethod === 'DELIVERY'} onChange={() => set('fulfillmentMethod', 'DELIVERY')} icon={<PinIcon width={22} height={22} />} title={t('homeDelivery')} desc={t('coDeliveryDesc')} />
+                  <Choice name="fulfillment" checked={form.fulfillmentMethod === 'PICKUP'} onChange={() => set('fulfillmentMethod', 'PICKUP')} icon={<StoreIcon width={22} height={22} />} title={t('branchPickup')} desc={t('coPickupDesc')} />
+                  <Choice name="fulfillment" checked={form.fulfillmentMethod === 'DELIVERY'} onChange={() => set('fulfillmentMethod', 'DELIVERY')} icon={<TruckIcon width={22} height={22} />} title={t('homeDelivery')} desc={t('coDeliveryDesc')} />
                 </div>
                 {form.fulfillmentMethod === 'DELIVERY' ? (
                   <div className="mt-4">
@@ -252,8 +252,8 @@ export default function CheckoutPage() {
                   {t('coPayment')}
                 </h2>
                 <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  <Choice name="payment" checked={form.paymentMethod === 'CASH'} onChange={() => set('paymentMethod', 'CASH')} icon={<PartsIcon width={22} height={22} />} title={t('cash')} />
-                  <Choice name="payment" checked={form.paymentMethod === 'CARD'} onChange={() => set('paymentMethod', 'CARD')} icon={<CarIcon width={22} height={22} />} title={t('card')} />
+                  <Choice name="payment" checked={form.paymentMethod === 'CASH'} onChange={() => set('paymentMethod', 'CASH')} icon={<CashIcon width={22} height={22} />} title={t('cash')} />
+                  <Choice name="payment" checked={form.paymentMethod === 'CARD'} onChange={() => set('paymentMethod', 'CARD')} icon={<CreditCardIcon width={22} height={22} />} title={t('card')} />
                 </div>
                 <div className="mt-5">
                   <label htmlFor="co-notes" className="text-sm font-bold text-brand-ink">{t('coNotes')}</label>

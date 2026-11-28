@@ -11,7 +11,9 @@ export function formatPrice(value: string | number, locale: Locale): string {
   return new Intl.NumberFormat(tag, {
     style: 'currency',
     currency: DISPLAY_CURRENCY,
-    maximumFractionDigits: 0,
+    // Whole-pound prices read as 320; a price with piasters keeps them (185.50) instead of being rounded.
+    minimumFractionDigits: Number.isInteger(amount) ? 0 : 2,
+    maximumFractionDigits: 2,
   }).format(amount);
 }
 

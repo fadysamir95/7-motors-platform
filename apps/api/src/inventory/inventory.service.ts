@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AdjustStockDto } from './dto/adjust-stock.dto';
 
@@ -16,18 +16,29 @@ export class InventoryService {
     return inv;
   }
 
+  /**
+   * Changes on-hand stock with ONE conditional UPDATE, so concurrent adjustments and checkouts cannot push it below
+   * zero or below the units already reserved for pending orders. Every change leaves a movement row.
+   */
   async adjust(productId: string, dto: AdjustStockDto, userId?: string) {
     const inv = await this.prisma.inventory.findUnique({ where: { productId } });
     if (!inv) throw new NotFoundException('Inventory not found');
     const type = dto.type || 'ADJUSTMENT';
-    const newStock = type === 'OUT' ? inv.stock - dto.quantity : inv.stock + dto.quantity;
-    const [updated] = await this.prisma.$transaction([
-      this.prisma.inventory.update({ where: { productId }, data: { stock: newStock } }),
-      this.prisma.inventoryMovement.create({
+    if (type === 'ADJUSTMENT' ? dto.quantity === 0 : dto.quantity <= 0) {
+      throw new BadRequestException(type === 'ADJUSTMENT' ? 'An adjustment cannot be 0' : 'quantity must be a positive number of units');
+    }
+    const delta = type === 'OUT' ? -dto.quantity : dto.quantity;
+    return this.prisma.$transaction(async (tx) => {
+      const changed = await tx.$executeRaw`
+        UPDATE "Inventory"
+        SET "stock" = "stock" + ${delta}, "updatedAt" = NOW() AT TIME ZONE 'UTC'
+        WHERE "productId" = ${productId} AND "stock" + ${delta} >= "reserved"`;
+      if (changed !== 1) throw new BadRequestException('Stock cannot go below zero or below the units already reserved');
+      await tx.inventoryMovement.create({
         data: { inventoryId: inv.id, type: type as any, quantity: dto.quantity, note: dto.note, createdBy: userId },
-      }),
-    ]);
-    return updated;
+      });
+      return tx.inventory.findUniqueOrThrow({ where: { productId } });
+    });
   }
 
   async reserve(productId: string, quantity: number) {

@@ -11,7 +11,9 @@ type Model = { id: string; name: string };
 type Slot = { startTime: string; available: boolean };
 
 const PHONE_RE = /^[0-9+\-\s()]{7,20}$/;
-const INSTALL_SLUG = 'parts-installation';
+const PERIODIC_SLUG = 'periodic-maintenance';
+/** "Other" is stored as this existing service; what the customer actually needs goes in the notes. */
+const OTHER_SLUG = 'general-maintenance';
 
 const input =
   'mt-1.5 h-12 w-full rounded-xl border bg-card px-4 text-base text-brand-ink placeholder:text-brand-ink/40 focus:border-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-lime-dark/40';
@@ -83,9 +85,9 @@ function BookingContent() {
         if (!alive) return;
         const list: ServiceType[] = Array.isArray(d) ? d : d.items || [];
         setServiceTypes(list);
-        // Coming from an order: installation is what the customer is here for.
-        const install = orderId ? list.find((s) => s.slug === INSTALL_SLUG) : undefined;
-        if (install) setForm((f) => (f.serviceTypeIds.length ? f : { ...f, serviceTypeIds: [install.id] }));
+        // Coming from an order: the customer wants the parts installed, which is an "other" request.
+        const other = orderId ? list.find((s) => s.slug === OTHER_SLUG) : undefined;
+        if (other) setForm((f) => (f.serviceTypeIds.length ? f : { ...f, serviceTypeIds: [other.id] }));
       })
       .catch(() => undefined);
     // Reuse the contact details from checkout, and show which order this booking belongs to.
@@ -120,6 +122,10 @@ function BookingContent() {
   const slotItems = slots?.date === form.date ? slots.items : [];
 
   const serviceName = (s: ServiceType) => s.translations?.find((x) => x.locale === locale)?.name || s.translations?.[0]?.name || s.slug;
+  const periodic = serviceTypes.find((s) => s.slug === PERIODIC_SLUG);
+  const other = serviceTypes.find((s) => s.slug === OTHER_SLUG);
+  const otherSelected = Boolean(other && form.serviceTypeIds.includes(other.id));
+  const displayName = (s: ServiceType) => (s.id === other?.id ? t('bkOther') : serviceName(s));
   const chosenServices = useMemo(() => serviceTypes.filter((s) => form.serviceTypeIds.includes(s.id)), [serviceTypes, form.serviceTypeIds]);
   const years = useMemo(() => {
     const current = new Date().getFullYear();
@@ -146,6 +152,7 @@ function BookingContent() {
     if (!PHONE_RE.test(form.phone.trim())) next.phone = t('prPhoneInvalid');
     if (form.licenseNumber.trim().length < 2) next.licenseNumber = t('bkErrPlate');
     if (!form.serviceTypeIds.length) next.services = t('bkErrServices');
+    else if (otherSelected && form.notes.trim().length < 3) next.notes = t('bkErrOther');
     if (!form.date) next.date = t('bkErrDate');
     else if (!form.startTime) next.startTime = t('bkErrSlot');
     setErrors(next);
@@ -186,7 +193,7 @@ function BookingContent() {
             ref: booking.bookingRef,
             date: form.date,
             startTime: form.startTime,
-            services: chosenServices.map(serviceName),
+            services: chosenServices.map(displayName),
             plate: form.licenseNumber.trim(),
             orderNumber: linkedOrder ?? undefined,
           }),
@@ -276,20 +283,29 @@ function BookingContent() {
 
             <Card n={3} title={t('bkServices')}>
               <div id="bk-services" tabIndex={-1} className="grid gap-3 sm:grid-cols-2">
-                {serviceTypes.map((s) => {
-                  const on = form.serviceTypeIds.includes(s.id);
-                  return (
-                    <label key={s.id} className={`relative flex cursor-pointer items-center gap-3 rounded-xl border-2 p-3.5 transition has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand-ink ${on ? 'border-brand-ink bg-brand-ink/[0.04]' : 'border-border hover:border-brand-ink/40'}`}>
-                      <input suppressHydrationWarning type="checkbox" className="sr-only" checked={on} onChange={() => toggleService(s.id)} />
-                      <span aria-hidden="true" className={`grid h-6 w-6 shrink-0 place-items-center rounded-md border-2 ${on ? 'border-brand-ink bg-brand-ink text-brand-lime' : 'border-border'}`}>
-                        {on ? <CheckIcon width={14} height={14} strokeWidth={3.5} /> : null}
-                      </span>
-                      <span className="font-semibold text-brand-ink">{serviceName(s)}</span>
-                    </label>
-                  );
-                })}
+                {[periodic && { s: periodic, label: serviceName(periodic) }, other && { s: other, label: t('bkOther') }]
+                  .filter((x): x is { s: ServiceType; label: string } => Boolean(x))
+                  .map(({ s, label }) => {
+                    const on = form.serviceTypeIds.includes(s.id);
+                    return (
+                      <label key={s.id} className={`relative flex cursor-pointer items-center gap-3 rounded-xl border-2 p-4 transition has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand-ink ${on ? 'border-brand-ink bg-brand-ink/[0.04]' : 'border-border hover:border-brand-ink/40'}`}>
+                        <input suppressHydrationWarning type="checkbox" className="sr-only" checked={on} onChange={() => toggleService(s.id)} />
+                        <span aria-hidden="true" className={`grid h-6 w-6 shrink-0 place-items-center rounded-md border-2 ${on ? 'border-brand-ink bg-brand-ink text-brand-lime' : 'border-border'}`}>
+                          {on ? <CheckIcon width={14} height={14} strokeWidth={3.5} /> : null}
+                        </span>
+                        <span className="font-bold text-brand-ink">{label}</span>
+                      </label>
+                    );
+                  })}
               </div>
               {errors.services ? <p className="mt-2 text-sm font-semibold text-red-700">{errors.services}</p> : null}
+              {otherSelected ? (
+                <div className="mt-4">
+                  <label htmlFor="bk-notes" className="text-sm font-bold text-brand-ink">{t('bkOtherLabel')}</label>
+                  <textarea suppressHydrationWarning id="bk-notes" rows={4} maxLength={500} value={form.notes} onChange={(e) => set('notes', e.target.value)} placeholder={t('bkOtherPlaceholder')} aria-invalid={Boolean(errors.notes)} aria-describedby={errors.notes ? 'bk-notes-err' : undefined} className={`mt-1.5 w-full rounded-xl border bg-card px-4 py-3 text-base text-brand-ink placeholder:text-brand-ink/40 focus:border-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-lime-dark/40 ${errors.notes ? 'border-red-600' : 'border-border'}`} />
+                  {errors.notes ? <p id="bk-notes-err" className="mt-1 text-sm font-semibold text-red-700">{errors.notes}</p> : null}
+                </div>
+              ) : null}
             </Card>
 
             <Card n={4} title={t('bkWhen')}>
@@ -324,10 +340,12 @@ function BookingContent() {
                 ) : null}
                 {errors.startTime ? <p className="mt-2 text-sm font-semibold text-red-700">{errors.startTime}</p> : null}
               </div>
-              <div className="mt-5">
-                <label htmlFor="bk-notes" className="text-sm font-bold text-brand-ink">{t('notes')} ({t('bkOptional')})</label>
-                <textarea suppressHydrationWarning id="bk-notes" rows={2} maxLength={500} value={form.notes} onChange={(e) => set('notes', e.target.value)} className="mt-1.5 w-full rounded-xl border border-border bg-card px-4 py-3 text-base text-brand-ink focus:border-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-lime-dark/40" />
-              </div>
+              {!otherSelected ? (
+                <div className="mt-5">
+                  <label htmlFor="bk-notes" className="text-sm font-bold text-brand-ink">{t('notes')} ({t('bkOptional')})</label>
+                  <textarea suppressHydrationWarning id="bk-notes" rows={2} maxLength={500} value={form.notes} onChange={(e) => set('notes', e.target.value)} className="mt-1.5 w-full rounded-xl border border-border bg-card px-4 py-3 text-base text-brand-ink focus:border-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-lime-dark/40" />
+                </div>
+              ) : null}
             </Card>
           </div>
 
@@ -336,7 +354,7 @@ function BookingContent() {
             <dl className="mt-4 space-y-3 text-sm">
               <div>
                 <dt className="text-muted">{t('bkServices')}</dt>
-                <dd className="mt-0.5 font-semibold text-brand-ink">{chosenServices.length ? chosenServices.map(serviceName).join('، ') : <span className="text-muted">{t('bkNothing')}</span>}</dd>
+                <dd className="mt-0.5 font-semibold text-brand-ink">{chosenServices.length ? chosenServices.map(displayName).join('، ') : <span className="text-muted">{t('bkNothing')}</span>}</dd>
               </div>
               <div>
                 <dt className="text-muted">{t('bkWhenLabel')}</dt>
