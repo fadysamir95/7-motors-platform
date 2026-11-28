@@ -26,6 +26,7 @@ function Svg({ children, ...props }: IconProps & { children: React.ReactNode }) 
 export const ArrowIcon = (p: IconProps) => (
   <Svg {...p} className={`rtl:-scale-x-100 ${p.className ?? ''}`}><path d="M5 12h14M13 6l6 6-6 6" /></Svg>
 );
+export const SearchIcon = (p: IconProps) => <Svg {...p}><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4.5 4.5" /></Svg>;
 export const MenuIcon = (p: IconProps) => <Svg {...p}><path d="M4 7h16M4 12h16M4 17h16" /></Svg>;
 export const CloseIcon = (p: IconProps) => <Svg {...p}><path d="M6 6l12 12M18 6L6 18" /></Svg>;
 export const CartIcon = (p: IconProps) => (
@@ -35,10 +36,10 @@ export const CalendarIcon = (p: IconProps) => (
   <Svg {...p}><rect x="3.5" y="5" width="17" height="15.5" rx="2.5" /><path d="M8 3v4M16 3v4M3.5 10h17" /></Svg>
 );
 export const WrenchIcon = (p: IconProps) => (
-  <Svg {...p}><path d="M14.7 6.3a4 4 0 0 0 4.9 4.9l-9.4 9.4a2.1 2.1 0 0 1-3-3l9.4-9.4a4 4 0 0 0-1.9-1.9z" transform="translate(0 -1)" /></Svg>
+  <Svg {...p}><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" /></Svg>
 );
 export const PartsIcon = (p: IconProps) => (
-  <Svg {...p}><circle cx="12" cy="12" r="3.2" /><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.8 1.8M16.7 16.7l1.8 1.8M18.5 5.5l-1.8 1.8M7.3 16.7l-1.8 1.8" /></Svg>
+  <Svg {...p}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /><circle cx="12" cy="12" r="3" /></Svg>
 );
 export const CarIcon = (p: IconProps) => (
   <Svg {...p}><path d="M4 16v-3.5l1.8-4.2A2 2 0 0 1 7.7 7h8.6a2 2 0 0 1 1.9 1.3l1.8 4.2V16" /><path d="M3 16h18v2.5a.5.5 0 0 1-.5.5H18a.5.5 0 0 1-.5-.5V17h-11v1.5a.5.5 0 0 1-.5.5H3.5a.5.5 0 0 1-.5-.5z" /><circle cx="7.5" cy="13" r=".9" /><circle cx="16.5" cy="13" r=".9" /></Svg>

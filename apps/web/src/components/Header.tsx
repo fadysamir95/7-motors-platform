@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useLocale } from '@/components/LocaleProvider';
+import { useCartCount } from '@/lib/cart';
 import { CartIcon, CloseIcon, MenuIcon } from '@/components/ui/Icons';
 import type { TranslationKey } from '@/lib/i18n';
 
@@ -22,6 +23,7 @@ function isActive(pathname: string, href: string) {
 
 export default function Header() {
   const { t, locale, setLocale } = useLocale();
+  const cartCount = useCartCount();
   const pathname = usePathname();
   // The menu is "open for a given path", so navigating automatically closes it.
   const [openAt, setOpenAt] = useState<string | null>(null);
@@ -81,10 +83,15 @@ export default function Header() {
         <div className="flex items-center gap-2">
           <Link
             href="/cart"
-            aria-label={t('cart')}
-            className="grid h-10 w-10 place-items-center rounded-lg text-brand-bone/90 transition hover:bg-white/10 hover:text-brand-lime focus-visible:outline-2 focus-visible:outline-brand-lime"
+            aria-label={cartCount > 0 ? `${t('cart')} (${cartCount})` : t('cart')}
+            className="relative grid h-10 w-10 place-items-center rounded-lg text-brand-bone/90 transition hover:bg-white/10 hover:text-brand-lime focus-visible:outline-2 focus-visible:outline-brand-lime"
           >
             <CartIcon />
+            {cartCount > 0 ? (
+              <span key={cartCount} className="cart-pop absolute -end-0.5 -top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-brand-lime px-1 text-[0.7rem] font-extrabold leading-none text-brand-ink">
+                {cartCount > 99 ? '99+' : cartCount}
+              </span>
+            ) : null}
           </Link>
           <button
             type="button"

@@ -27,6 +27,8 @@ CC BY-SA also requires that adaptations (these crops/resizes) are shared under t
 |---|---|---|---|---|
 | `/images/vehicles/logan.webp` | Moscow, Renault Logan II Stepway silver, Oct 2025 02.jpg | Retired electrician | CC0 | https://commons.wikimedia.org/wiki/File:Moscow,_Renault_Logan_II_Stepway_silver,_Oct_2025_02.jpg |
 | `/images/vehicles/sandero.webp` | 2018 Renault Sandero Stepway silver front.jpg | Throwawayacc222 | CC0 | https://commons.wikimedia.org/wiki/File:2018_Renault_Sandero_Stepway_silver_front.jpg |
+| `/images/vehicles/lodgy.webp` | Dacia Lodgy 194851.jpg (the Lodgy sold as the Renault Lodgy; Commons has no Renault-badged photo, so the small Dacia badge on the tailgate is visible) | Wikimedia Commons contributor | CC0 | https://commons.wikimedia.org/wiki/File:Dacia_Lodgy_194851.jpg |
+| `/images/vehicles/megane.webp` | Renault MEGANE GT Line (ABA-BBH5F) front.jpg | Tokumeigakarinoaoshima | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Renault_MEGANE_GT_Line_(ABA-BBH5F)_front.jpg |
 | `/images/vehicles/megane-2.webp` | Renault Mégane II Wagon in Aardenhburg.jpg | Charles01 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Renault_M%C3%A9gane_II_Wagon_in_Aardenhburg.jpg |
 | `/images/vehicles/megane-3.webp` | 2011 Renault Mégane (B32) Privilege hatchback (2015-07-15) 01.jpg | OSX | Public domain | https://commons.wikimedia.org/wiki/File:2011_Renault_M%C3%A9gane_(B32)_Privilege_hatchback_(2015-07-15)_01.jpg |
 | `/images/vehicles/megane-4.webp` | Renault Megane IV Sedan 1X7A0225.jpg | Alexander Migl | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Renault_Megane_IV_Sedan_1X7A0225.jpg |

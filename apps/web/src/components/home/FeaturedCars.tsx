@@ -94,12 +94,6 @@ export default function FeaturedCars() {
           ) : null}
         </div>
 
-        {state.status === 'ready' && state.sample ? (
-          <p className="mb-6 rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-900">
-            {t('carsSampleNotice')}
-          </p>
-        ) : null}
-
         {state.status === 'loading' ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" aria-busy="true">
             {Array.from({ length: LIMIT }).map((_, i) => (

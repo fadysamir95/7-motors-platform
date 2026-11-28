@@ -3,14 +3,16 @@
  *
  * Files live in `public/images/vehicles/` (optimized WebP). The frontend prefers these local files over the
  * `imageUrl` stored in the database, because the seeded URLs are hotlinks to Wikimedia filenames that are
- * not guaranteed to exist. Models without an entry (currently `lodgy`) render a neutral placeholder until a
- * properly licensed Renault photo is added. Credits: `public/images/CREDITS.md`.
+ * not guaranteed to exist. Models without an entry render a neutral placeholder until a
+ * properly licensed photo is added. Credits: `public/images/CREDITS.md`.
  */
 export type VehicleImage = { src: string; width: number; height: number; blur: string };
 
 export const vehicleImages: Record<string, VehicleImage> = {
   'logan': { src: '/images/vehicles/logan.webp', width: 1000, height: 613, blur: 'data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAACwAQCdASoQAAoAA4BaJZwAAj0zWwaAAP7x4JZR1Ty+f4IBB68+wiRzZCsniUYZ8yxS5dT5k0vioDSt7hA0TVuE7QpoNbvceS9ak3tXgeAAAA==' },
   'sandero': { src: '/images/vehicles/sandero.webp', width: 1000, height: 726, blur: 'data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAQAgCdASoQAAwAA4BaJZQCdAYsY9aRxoIAAP6pSOGNMdUkDzSFPt4tSbmIFRKt+ftTvmNlrIMTuX20H443DQuJ0KWoqmsiRnzDg6F919HwB9st9F6TZuzftzns3nkBjAA=' },
+  'lodgy': { src: '/images/vehicles/lodgy.webp', width: 1000, height: 721, blur: 'data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAQAgCdASoQAAwAA4BaJYwCdAEfbPpmrQ4AAP6EHwvcaS4JfVLeibWzVSmSzbEVtQZIaPtrtiw0l0spJBnArpuLMX3xpQ4QkQuB41uWgaY6TsmAAAA=' },
+  'megane': { src: '/images/vehicles/megane.webp', width: 1000, height: 750, blur: 'data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAAAQAgCdASoQAAwAA4BaJYwCdADRraTkqpnQAOHVGmHssBwXBIoRvWnx9Ncl+7jzNyeVRywHOoQTfoef+/z5zwTjThBM+k2TIll/CO7PpnfgAAAA' },
   'megane-2': { src: '/images/vehicles/megane-2.webp', width: 1000, height: 600, blur: 'data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAQAgCdASoQAAoAA4BaJQBOgMX6l4t8KGmAAPa+Q/3QJk1F+gWCwAWlOa2n/YrJFFIorpkZLQO43vgSgCAN2gnD8jWphVd257m5jnGc0zx/ojhwUTXcQBho/DzE5yYgAAA=' },
   'megane-3': { src: '/images/vehicles/megane-3.webp', width: 1000, height: 669, blur: 'data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAQAgCdASoQAAsAA4BaJaQAAvqpax61L+0AAP7p/aXBdNdzMNRnDciMCAYKWRIFpgm8eglzWae3K/dOLoGV3EULzZ6mxNIXzDezTan8fbs7xhQAAAA=' },
   'megane-4': { src: '/images/vehicles/megane-4.webp', width: 1000, height: 510, blur: 'data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADwAQCdASoQAAgAA4BaJZQAD4MQBdzrmwAA/k0dVjshiuWg7PTMLjI8y9UfZxL7W3OnmkEutFFrdgenFpAZLXFTYBw8BNHAqdo2pdaQOijFAAAA' },

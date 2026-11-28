@@ -82,6 +82,17 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Tailwind v4 resets buttons to the default cursor; clickable controls should show the pointer. */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+summary,
+select:not(:disabled) {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -328,7 +339,7 @@ html {
   border: 2px solid rgb(255 255 255 / 0.8);
   background: transparent;
   color: var(--bone);
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, translate 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, translate 0.3s ease;
 }
 .svc-card:hover .svc-cta,
 .svc-cta:hover,
@@ -427,4 +438,146 @@ html[lang='en'] .font-display {
   font-stretch: 125%;
   text-transform: uppercase;
   letter-spacing: -0.02em;
+}
+
+/* ---------- Vehicle selection page (app/vehicles/page.tsx) ---------- */
+/* One entrance for everything: a short fade and rise. Cards add --i (index) for a quick stagger capped at 8 steps. */
+@keyframes veh-rise {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+  to { opacity: 1; transform: none; }
+}
+.veh-rise {
+  animation: veh-rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(min(var(--i, 0), 8) * 45ms + var(--d, 0ms));
+}
+/* Hero light streaks draw in once; they do not loop. */
+@keyframes veh-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+.veh-streak {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: veh-draw 1.8s cubic-bezier(0.3, 0.6, 0.2, 1) 0.2s forwards;
+}
+.veh-streak-2 {
+  animation-delay: 0.5s;
+}
+/* Search field: lifts slightly and gains a soft lime halo while focused. */
+.veh-search {
+  transition: box-shadow 0.25s ease, translate 0.25s ease;
+}
+.veh-search:focus-within {
+  translate: 0 -1px;
+  box-shadow: 0 0 0 4px rgb(198 245 63 / 0.28), 0 18px 40px -18px rgb(0 0 0 / 0.7);
+}
+/* Cards: elevation on hover/focus, with the arrow nudging in the reading direction. */
+.veh-card {
+  transition: translate 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s ease;
+}
+.veh-card:hover,
+.veh-card:focus-visible {
+  translate: 0 -5px;
+  box-shadow: 0 22px 44px -22px rgb(30 31 28 / 0.55);
+}
+.veh-arrow {
+  --nudge: -3px;
+  transition: translate 0.25s ease;
+}
+[dir='ltr'] .veh-arrow {
+  --nudge: 3px;
+}
+.veh-card:hover .veh-arrow,
+.veh-card:focus-visible .veh-arrow,
+.veh-continue:hover .veh-arrow,
+.veh-continue:focus-visible .veh-arrow {
+  translate: var(--nudge) 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .veh-rise,
+  .veh-streak {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+    stroke-dashoffset: 0;
+  }
+  .veh-card:hover,
+  .veh-card:focus-visible,
+  .veh-search:focus-within {
+    translate: none;
+  }
+  .veh-card:hover .veh-arrow,
+  .veh-card:focus-visible .veh-arrow {
+    translate: none;
+  }
+}
+
+/* ---------- Car loader (components/ui/CarLoader.tsx) ---------- */
+@keyframes car-wheel {
+  to { transform: rotate(360deg); }
+}
+@keyframes car-road {
+  to { stroke-dashoffset: -60; }
+}
+@keyframes car-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1.2px); }
+}
+@keyframes car-beam {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+.car-loader .car-wheel {
+  animation: car-wheel 0.6s linear infinite;
+}
+.car-loader .car-road {
+  animation: car-road 0.9s linear infinite;
+}
+.car-loader .car-body {
+  animation: car-bob 0.45s ease-in-out infinite;
+}
+.car-loader .car-beam {
+  animation: car-beam 1.2s ease-in-out infinite;
+}
+.car-loader.car-still * {
+  animation: none !important;
+}
+/* The page-level loader waits a moment before showing, so quick navigations never flash it. */
+@keyframes loader-delayed {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.loader-delayed {
+  opacity: 0;
+  animation: loader-delayed 0.3s ease 0.25s forwards;
+}
+/* Toasts and the cart badge */
+@keyframes toast-in {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+  to { opacity: 1; transform: none; }
+}
+.toast-in {
+  animation: toast-in 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes cart-pop {
+  0% { transform: scale(0.6); }
+  60% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+.cart-pop {
+  animation: cart-pop 0.35s ease-out;
+}
+/* Looping animations would flicker under the global reduced-motion rule (0.01ms durations), so they stop outright. */
+@media (prefers-reduced-motion: reduce) {
+  .car-loader .car-wheel,
+  .car-loader .car-road,
+  .car-loader .car-body,
+  .car-loader .car-beam,
+  .cart-pop {
+    animation: none !important;
+  }
+  .loader-delayed {
+    animation: none !important;
+    opacity: 1;
+  }
 }
